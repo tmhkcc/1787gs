@@ -1,0 +1,1971 @@
+```html
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小童軍團管理系統 - 雲端協作與 Excel 導出版</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- SheetJS (Excel Engine for Mobile Direct Download) -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap');
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f3f4f6;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        scout: {
+                            light: '#e6f4ea',
+                            green: '#005a36',
+                            dark: '#004026',
+                            accent: '#f59e0b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="min-h-screen flex flex-col md:flex-row">
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-64 bg-scout-dark text-white flex-shrink-0">
+            <div class="p-5 flex items-center gap-3 border-b border-scout-green">
+                <div class="bg-scout-accent p-2 rounded-full text-scout-dark">
+                    <i data-lucide="sprout" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="font-black text-lg tracking-wider">小童軍管理系統</h1>
+                    <p class="text-xs text-scout-light opacity-80">1787 Grasshopper Ring</p>
+                </div>
+            </div>
+            
+            <nav class="p-4 space-y-1">
+                <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition bg-scout-green text-white font-medium">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>儀表板 Dashboard</span>
+                </button>
+                <button onclick="switchTab('roster')" id="btn-roster" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-scout-light opacity-85 hover:bg-scout-green hover:opacity-100 transition">
+                    <i data-lucide="users" class="w-5 h-5"></i>
+                    <span>成員及領袖名冊</span>
+                </button>
+                <button onclick="switchTab('attendance')" id="btn-attendance" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-scout-light opacity-85 hover:bg-scout-green hover:opacity-100 transition">
+                    <i data-lucide="calendar-check" class="w-5 h-5"></i>
+                    <span>一鍵點名系統</span>
+                </button>
+                <button onclick="switchTab('fees')" id="btn-fees" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-scout-light opacity-85 hover:bg-scout-green hover:opacity-100 transition">
+                    <i data-lucide="dollar-sign" class="w-5 h-5"></i>
+                    <span>季度旅費管理</span>
+                </button>
+                <button onclick="switchTab('progress')" id="btn-progress" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-scout-light opacity-85 hover:bg-scout-green hover:opacity-100 transition">
+                    <i data-lucide="award" class="w-5 h-5"></i>
+                    <span>小草蜢體驗進度</span>
+                </button>
+                <button onclick="switchTab('certificate')" id="btn-certificate" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-scout-light opacity-85 hover:bg-scout-green hover:opacity-100 transition">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                    <span>獎勵證書紀錄</span>
+                </button>
+                <button onclick="switchTab('ai-guide')" id="btn-ai-guide" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-scout-light opacity-85 hover:bg-scout-green hover:opacity-100 transition">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                    <span>AI 領袖集會指引</span>
+                </button>
+                <button onclick="switchTab('settings')" id="btn-settings" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-scout-light opacity-85 hover:bg-scout-green hover:opacity-100 transition">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    <span>數據管理與 Excel</span>
+                </button>
+            </nav>
+
+            <div class="mt-auto p-4 border-t border-scout-green text-xs text-scout-light opacity-70 text-center">
+                香港童軍總會第1787旅小童軍團<br>© 2026 T M H K
+            </div>
+        </aside>
+
+        <!-- Main Content Space -->
+        <main class="flex-1 p-6 md:p-8 overflow-y-auto">
+            
+            <!-- Toast Notification Container -->
+            <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2"></div>
+
+            <!-- Header Info -->
+            <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <h2 id="page-title" class="text-2xl font-bold text-scout-dark">儀表板 Dashboard</h2>
+                        <span id="sync-status-badge" class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold flex items-center">
+                            <span class="inline-block w-2 h-2 bg-emerald-500 rounded-full animate-pulse mr-1.5"></span>
+                            雲端連線中...
+                        </span>
+                    </div>
+                    <p class="text-sm text-slate-500">集會時間：星期六晚上 7:15 - 8:30 </p>
+                </div>
+                <div class="bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-200 flex items-center gap-3 text-sm">
+                    <span class="inline-block w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
+                    <span id="current-date-time" class="font-medium text-slate-700">正在獲取時間...</span>
+                </div>
+            </header>
+
+            <!-- 1. DASHBOARD TAB -->
+            <section id="tab-dashboard" class="tab-content space-y-6">
+                <!-- Top Summary Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-slate-500 font-medium">小童軍成員 (雲端)</p>
+                            <h3 id="dash-scout-count" class="text-3xl font-bold text-slate-800 mt-1">-- / 24 <span class="text-sm font-normal text-slate-400">名</span></h3>
+                        </div>
+                        <div class="bg-emerald-100 p-3 rounded-xl text-emerald-700">
+                            <i data-lucide="users" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-slate-500 font-medium">團領袖 (Leaders)</p>
+                            <h3 id="dash-leader-count" class="text-3xl font-bold text-slate-800 mt-1">-- <span class="text-sm font-normal text-slate-400">員</span></h3>
+                        </div>
+                        <div class="bg-amber-100 p-3 rounded-xl text-amber-700">
+                            <i data-lucide="shield-check" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-slate-500 font-medium">本季旅費進度</p>
+                            <h3 id="dash-fee-status" class="text-3xl font-bold text-slate-800 mt-1">$0 / $3600</h3>
+                        </div>
+                        <div class="bg-sky-100 p-3 rounded-xl text-sky-700">
+                            <i data-lucide="circle-dollar-sign" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
+                        <div class="flex-1 pr-2">
+                            <p class="text-sm text-slate-500 font-medium">本日集會出席率</p>
+                            <h3 id="dash-attendance-rate" class="text-3xl font-bold text-slate-800 mt-1">--%</h3>
+                            <p id="dash-meeting-theme" class="text-xs text-scout-green font-semibold mt-1.5 truncate max-w-[150px]" title="主題">主題: 未設定</p>
+                        </div>
+                        <div class="bg-purple-100 p-3 rounded-xl text-purple-700 flex-shrink-0">
+                            <i data-lucide="calendar" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Next Meeting Countdown & Quick Actions -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-gradient-to-br from-scout-dark to-scout-green text-white p-6 rounded-2xl shadow-md lg:col-span-2">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-scout-accent text-scout-dark text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">下次集會提醒</span>
+                            <i data-lucide="clock" class="w-6 h-6 text-scout-light opacity-80"></i>
+                        </div>
+                        <h4 class="text-xl font-bold">每週六例行集會 (7:15 PM - 8:30 PM)</h4>
+                        <p class="text-sm text-scout-light mt-2 opacity-90">地點：南昌社區中心四字樓</p>
+                        
+                        <div class="mt-6 grid grid-cols-3 gap-2 bg-black/20 p-4 rounded-xl text-center">
+                            <div>
+                                <span id="countdown-days" class="block text-2xl font-bold">00</span>
+                                <span class="text-xs text-scout-light opacity-75">天</span>
+                            </div>
+                            <div>
+                                <span id="countdown-hours" class="block text-2xl font-bold">00</span>
+                                <span class="text-xs text-scout-light opacity-75">小時</span>
+                            </div>
+                            <div>
+                                <span id="countdown-mins" class="block text-2xl font-bold">00</span>
+                                <span class="text-xs text-scout-light opacity-75">分鐘</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                        <h4 class="text-lg font-bold text-slate-800 mb-2">領袖快捷通道</h4>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="switchTab('attendance')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-scout-light/50 border border-scout-green/10 text-scout-dark hover:bg-scout-green hover:text-white transition group">
+                                <i data-lucide="check-square" class="w-5 h-5 mb-1 text-scout-green group-hover:text-white"></i>
+                                <span class="text-[10px] font-bold">今日點名</span>
+                            </button>
+                            <button onclick="switchTab('fees')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-scout-light/50 border border-scout-green/10 text-scout-dark hover:bg-scout-green hover:text-white transition group">
+                                <i data-lucide="dollar-sign" class="w-5 h-5 mb-1 text-scout-green group-hover:text-white"></i>
+                                <span class="text-[10px] font-bold">收取季費</span>
+                            </button>
+                            <button onclick="switchTab('progress')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-scout-light/50 border border-scout-green/10 text-scout-dark hover:bg-scout-green hover:text-white transition group">
+                                <i data-lucide="star" class="w-5 h-5 mb-1 text-scout-green group-hover:text-white"></i>
+                                <span class="text-[10px] font-bold">進度登錄</span>
+                            </button>
+                            <button onclick="switchTab('certificate')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-scout-light/50 border border-scout-green/10 text-scout-dark hover:bg-scout-green hover:text-white transition group">
+                                <i data-lucide="book-open" class="w-5 h-5 mb-1 text-scout-green group-hover:text-white"></i>
+                                <span class="text-[10px] font-bold">獎勵紀錄</span>
+                            </button>
+                            <button onclick="switchTab('ai-guide')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-scout-light/50 border border-scout-green/10 text-scout-dark hover:bg-scout-green hover:text-white transition group">
+                                <i data-lucide="sparkles" class="w-5 h-5 mb-1 text-scout-green group-hover:text-white"></i>
+                                <span class="text-[10px] font-bold">AI指引</span>
+                            </button>
+                            <!-- Direct Mobile Excel Export (Added as requested) -->
+                            <button onclick="exportToExcel()" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 transition group col-span-1">
+                                <i data-lucide="file-spreadsheet" class="w-5 h-5 mb-1 text-white"></i>
+                                <span class="text-[10px] font-black">匯出Excel</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latest Activities and Scout Motto -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-lg font-bold text-slate-800">最新雲端動態</h4>
+                            <span class="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded">實時監控</span>
+                        </div>
+                        <ul class="space-y-3">
+                            <li class="flex gap-3 items-start border-b border-slate-50 pb-3">
+                                <span class="p-2 rounded-lg bg-orange-100 text-orange-700 mt-0.5"><i data-lucide="info" class="w-4 h-4"></i></span>
+                                <div>
+                                    <p class="text-sm font-semibold text-slate-700">全新：手機直接導出 Excel 文件</p>
+                                    <p class="text-xs text-slate-400 mt-0.5">不論在 iPhone 或 Android 均可一鍵生成並自動下載完整的 `.xlsx` 格式統計報表。</p>
+                                </div>
+                            </li>
+                            <li class="flex gap-3 items-start border-b border-slate-50 pb-3">
+                                <span class="p-2 rounded-lg bg-blue-100 text-blue-700 mt-0.5"><i data-lucide="sparkles" class="w-4 h-4"></i></span>
+                                <div>
+                                    <p class="text-sm font-semibold text-slate-700">旅費季度提醒</p>
+                                    <p class="text-xs text-slate-400 mt-0.5">預載 2026 年至 2035 年的所有季度，1、4、7、10月固定提示收取。</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-800 mb-2">小童軍支部理念</h4>
+                            <p class="text-sm text-slate-600 leading-relaxed italic">
+                                「小童軍支部是童軍運動的起點。4至7歲的兒童正處於建立自我概念、情緒表達及基本社交能力的關鍵時期。本支部以『認識自己，快樂同行』為教育目標，著重體驗與參與，讓孩子在愛與安全的環境中健康成長。」
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-slate-100 flex gap-4 text-xs text-slate-500">
+                            <div><strong class="text-scout-green">小童軍誓詞：</strong>「我願愛神、愛家、愛國家。」</div>
+                            <div><strong class="text-scout-green">小童軍規律：</strong>「小童軍，愛快樂，又聰明，又溫良。」</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. ROSTER TAB -->
+            <section id="tab-roster" class="tab-content hidden space-y-6">
+                <!-- Roster Selector Tabs -->
+                <div class="flex border-b border-slate-200">
+                    <button onclick="toggleRosterView('members')" id="btn-view-members" class="px-6 py-3 border-b-2 border-scout-green text-scout-green font-bold text-sm">
+                        小童軍成員名冊
+                    </button>
+                    <button onclick="toggleRosterView('leaders')" id="btn-view-leaders" class="px-6 py-3 border-b-2 border-transparent text-slate-500 font-medium hover:text-slate-800 text-sm">
+                        團領袖名冊
+                    </button>
+                </div>
+
+                <!-- Member Table Card -->
+                <div id="roster-members-view" class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <h3 class="text-lg font-bold text-slate-800">小童軍成員名冊 (4-7歲)</h3>
+                        <div class="flex gap-2">
+                            <button onclick="openAddMemberModal('member')" class="bg-scout-green hover:bg-scout-dark text-white text-xs px-4 py-2 rounded-lg font-bold transition flex items-center gap-1">
+                                <i data-lucide="plus" class="w-4 h-4"></i> 新增成員
+                            </button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-100">
+                                    <th class="p-4">會員編號</th>
+                                    <th class="p-4">姓名</th>
+                                    <th class="p-4">性別</th>
+                                    <th class="p-4">年齡</th>
+                                    <th class="p-4">宣誓日期</th>
+                                    <th class="p-4 text-right">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="member-table-body" class="text-sm divide-y divide-slate-100">
+                                <tr>
+                                    <td colspan="6" class="p-8 text-center text-slate-400">正在與雲端同步數據中...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Leader Table Card -->
+                <div id="roster-leaders-view" class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hidden">
+                    <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <h3 class="text-lg font-bold text-slate-800">團領袖名冊</h3>
+                        <div class="flex gap-2">
+                            <button onclick="openAddMemberModal('leader')" class="bg-scout-green hover:bg-scout-dark text-white text-xs px-4 py-2 rounded-lg font-bold transition flex items-center gap-1">
+                                <i data-lucide="plus" class="w-4 h-4"></i> 新增領袖
+                            </button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-100">
+                                    <th class="p-4">領袖編號</th>
+                                    <th class="p-4">姓名</th>
+                                    <th class="p-4">職位</th>
+                                    <th class="p-4">性別</th>
+                                    <th class="p-4">聯絡電話</th>
+                                    <th class="p-4 text-right">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leader-table-body" class="text-sm divide-y divide-slate-100">
+                                <tr>
+                                    <td colspan="6" class="p-8 text-center text-slate-400">正在與雲端同步數據中...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. ATTENDANCE TAB -->
+            <section id="tab-attendance" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+                    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                        <div class="max-w-md">
+                            <h3 class="text-lg font-bold text-slate-800">一鍵集會點名 (多端即時同步)</h3>
+                            <p class="text-xs text-slate-500 mt-1">選定日期後，輸入集會主題並進行點名，所有資料將實時在線同步並呈現於儀表板。</p>
+                        </div>
+                        <div class="flex flex-wrap gap-3 items-end w-full lg:w-auto">
+                            <!-- Meeting Date Selector -->
+                            <div class="w-full sm:w-auto">
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1">集會日期 (星期六)</label>
+                                <input type="date" id="attendance-date" onchange="handleDateChange()" class="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-sm bg-slate-50 text-slate-700 font-medium">
+                            </div>
+                            <!-- Theme of the Day -->
+                            <div class="flex-1 min-w-[200px] w-full sm:w-auto">
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1 flex items-center gap-1">
+                                    <span>是日主題 (Meeting Theme)</span>
+                                    <span class="text-[10px] bg-emerald-50 text-emerald-700 font-normal px-1 rounded">離焦自動儲存</span>
+                                </label>
+                                <input type="text" id="attendance-theme" onblur="saveCurrentThemeOnly()" placeholder="例如：公園探索、大自然藝術、健康飲食..." class="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-sm bg-slate-50 text-slate-700 font-medium focus:bg-white focus:ring-1 focus:ring-scout-green transition">
+                            </div>
+                            <div class="w-full sm:w-auto flex justify-end">
+                                <button onclick="setAllAttendance('present')" class="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs px-3 py-2 rounded-lg font-bold transition whitespace-nowrap h-[34px]">全員出席</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabs within Attendance to switch between Members and Leaders -->
+                    <div class="flex gap-2 p-1 bg-slate-100 rounded-xl max-w-xs">
+                        <button onclick="toggleAttendanceRole('members')" id="btn-att-members" class="flex-1 py-2 text-center text-xs font-bold rounded-lg transition bg-white text-scout-dark shadow-sm">
+                            小童軍成員
+                        </button>
+                        <button onclick="toggleAttendanceRole('leaders')" id="btn-att-leaders" class="flex-1 py-2 text-center text-xs font-bold rounded-lg transition text-slate-500 hover:text-slate-800">
+                            團領袖
+                        </button>
+                    </div>
+
+                    <!-- Attendance Grid/List -->
+                    <div class="border border-slate-100 rounded-xl overflow-hidden">
+                        <div class="grid grid-cols-12 bg-slate-50 p-4 font-bold text-xs text-slate-400 uppercase border-b border-slate-100">
+                            <div class="col-span-4">編號 / 姓名</div>
+                            <div class="col-span-3 text-center">狀態</div>
+                            <div class="col-span-5 text-right">快速操作</div>
+                        </div>
+                        <div id="attendance-list-container" class="divide-y divide-slate-100">
+                            <!-- Dynamically loaded list of members/leaders -->
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                        <span class="text-xs text-slate-400 self-center">系統會即時與雲端保存當次點名數據與主題。</span>
+                        <button onclick="saveAttendanceToHistory()" class="bg-scout-green hover:bg-scout-dark text-white text-xs px-5 py-2.5 rounded-lg font-bold transition">
+                            儲存是日主題與點名結果
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. FEES TAB -->
+            <section id="tab-fees" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800">季度旅費管理 (2026 - 2035)</h3>
+                            <p class="text-xs text-slate-500 mt-1">每季度旅費 $150，固定於 1、4、7、10 月份收取。</p>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <!-- Year Selector -->
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 mb-1">年度</label>
+                                <select id="fee-year-select" onchange="renderFeeTracker()" class="border border-slate-200 rounded-lg px-3 py-1.5 text-sm bg-slate-50 text-slate-700 font-medium">
+                                    <!-- Options generated from 2026 to 2035 -->
+                                </select>
+                            </div>
+                            <!-- Quarter Selector -->
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 mb-1">季度</label>
+                                <select id="fee-quarter-select" onchange="renderFeeTracker()" class="border border-slate-200 rounded-lg px-3 py-1.5 text-sm bg-slate-50 text-slate-700 font-medium">
+                                    <option value="1">第一季 (1月收)</option>
+                                    <option value="4" selected>第二季 (4月收)</option>
+                                    <option value="7">第三季 (7月收)</option>
+                                    <option value="10">第四季 (10月收)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistical Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <div class="text-center p-3">
+                            <span class="text-xs text-slate-400 font-semibold block">應收總額 (目前成員)</span>
+                            <span id="fee-total-required" class="text-xl font-bold text-slate-700 mt-1">$0</span>
+                        </div>
+                        <div class="text-center p-3 border-y sm:border-y-0 sm:border-x border-slate-200/50">
+                            <span class="text-xs text-slate-400 font-semibold block">已收金額</span>
+                            <span id="fee-collected-sum" class="text-xl font-bold text-emerald-600 mt-1">$0</span>
+                        </div>
+                        <div class="text-center p-3">
+                            <span class="text-xs text-slate-400 font-semibold block">已付款比例</span>
+                            <span id="fee-collected-ratio" class="text-xl font-bold text-scout-accent mt-1">0 名</span>
+                        </div>
+                    </div>
+
+                    <!-- Fee Collection Table -->
+                    <div class="border border-slate-100 rounded-xl overflow-hidden">
+                        <div class="grid grid-cols-12 bg-slate-50 p-4 font-bold text-xs text-slate-400 uppercase border-b border-slate-100">
+                            <div class="col-span-5">小童軍名稱</div>
+                            <div class="col-span-3 text-center">金額</div>
+                            <div class="col-span-4 text-right">繳付狀態 (點擊切換)</div>
+                        </div>
+                        <div id="fee-list-container" class="divide-y divide-slate-100">
+                            <!-- Dynamic fee list of members -->
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4 border-t border-slate-100">
+                        <button onclick="bulkPayFees(true)" class="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs px-4 py-2 rounded-lg font-bold transition">
+                            設為全員已付
+                        </button>
+                        <span class="text-xs text-slate-400">數據會即時同步至雲端。</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. PROGRESS TAB -->
+            <section id="tab-progress" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800">小草蜢章 - 7大體驗範疇進度</h3>
+                        <p class="text-xs text-slate-500 mt-1">追蹤每位成員的體驗項目，勾選以記錄累積進度，完全對應最新小童軍活動指引。</p>
+                    </div>
+
+                    <!-- Select Member to Edit Progress -->
+                    <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <div class="w-full sm:w-64">
+                            <label class="block text-xs font-bold text-slate-400 mb-1">選擇小童軍</label>
+                            <select id="progress-member-select" onchange="loadMemberProgress()" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white text-slate-700 font-medium">
+                                <!-- Options populated by JS -->
+                            </select>
+                        </div>
+                        <div class="flex-1">
+                            <span class="text-xs text-slate-400 font-semibold block">當前小草蜢獎章總進度</span>
+                            <div class="flex items-center gap-3 mt-1.5">
+                                <div class="flex-1 h-3 bg-slate-200 rounded-full overflow-hidden">
+                                    <div id="member-total-progressbar" class="h-full bg-scout-green transition-all duration-300" style="width: 0%;"></div>
+                                </div>
+                                <span id="member-total-progress-percent" class="text-sm font-bold text-slate-700">0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 7 Categories Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="progress-categories-container">
+                        <!-- Category Cards with detailed checkboxes will be rendered by JS -->
+                    </div>
+
+                    <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                        <button onclick="saveMemberProgress()" class="bg-scout-green hover:bg-scout-dark text-white text-xs px-6 py-2.5 rounded-lg font-bold transition">
+                            儲存進度紀錄至雲端
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. CERTIFICATE RECORDS TAB -->
+            <section id="tab-certificate" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800">獎勵證書及獎章紀錄</h3>
+                        <p class="text-xs text-slate-500 mt-1">在此登記成員已獲頒發的範疇體驗證書或「小草蜢獎章」紀錄。</p>
+                    </div>
+
+                    <!-- Add Record Form -->
+                    <form id="add-award-form" onsubmit="handleAddAward(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100 items-end">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-1">1. 選擇成員</label>
+                            <select id="cert-member-select" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm bg-white text-slate-700">
+                                <!-- Filled by JS -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-1">2. 獲得項目</label>
+                            <select id="cert-type-select" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm bg-white text-slate-700">
+                                <option value="我愛自己及家庭範疇證書">我愛自己及家庭範疇證書</option>
+                                <option value="我愛運動與健康範疇證書">我愛運動與健康範疇證書</option>
+                                <option value="我愛創新範疇證書">我愛創新範疇證書</option>
+                                <option value="我愛戶外範疇證書">我愛戶外範疇證書</option>
+                                <option value="我愛科學與大自然範疇證書">我愛科學與大自然範疇證書</option>
+                                <option value="我愛國家與社區範疇證書">我愛國家與社區範疇證書</option>
+                                <option value="我愛童軍大家庭範疇證書">我愛童軍大家庭範疇證書</option>
+                                <option value="🏆 小草蜢獎章 (Grasshopper Scout Badge)">🏆 小草蜢獎章 (Grasshopper Scout Badge)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-1">3. 獲發日期</label>
+                            <input type="date" id="cert-date" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm bg-white text-slate-700">
+                        </div>
+                        <div>
+                            <button type="submit" class="w-full bg-scout-green hover:bg-scout-dark text-white text-sm px-4 py-2.5 rounded-lg font-bold transition flex items-center justify-center gap-2">
+                                <i data-lucide="plus" class="w-4 h-4"></i> 新增紀錄
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Awards Records Table -->
+                    <div class="border border-slate-100 rounded-xl overflow-hidden">
+                        <div class="grid grid-cols-12 bg-slate-50 p-4 font-bold text-xs text-slate-400 uppercase border-b border-slate-100">
+                            <div class="col-span-3">日期</div>
+                            <div class="col-span-4">姓名 (編號)</div>
+                            <div class="col-span-4">項目</div>
+                            <div class="col-span-1 text-right">操作</div>
+                        </div>
+                        <div id="awards-list-container" class="divide-y divide-slate-100">
+                            <!-- Dynamic awards records injected here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. AI MEETING GUIDE TAB -->
+            <section id="tab-ai-guide" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800">AI 領袖集會指引助手 (Gemini 2.5)</h3>
+                        <p class="text-xs text-slate-500 mt-1">輸入您想要的主題，AI 將結合 4-7 歲幼童的生理特徵與香港小童軍規律，為您精心制定 1小時15分鐘 (7:15 PM - 8:30 PM) 的優質集會指引。</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">本週集會主題/活動類別</label>
+                            <input type="text" id="ai-theme-input" placeholder="例如：公園探索、大自然藝術、健康飲食、聖誕節特別集會..." class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-700">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">特別備註 (可選)</label>
+                            <textarea id="ai-notes-input" placeholder="例如：有新成員剛加入，需要包含破冰遊戲；今天多在室內進行..." class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-700 h-20"></textarea>
+                        </div>
+                        
+                        <div class="flex justify-end">
+                            <button onclick="generateAIGuide()" id="btn-generate-ai" class="bg-scout-green hover:bg-scout-dark text-white text-sm px-6 py-3 rounded-lg font-bold transition flex items-center gap-2">
+                                <i data-lucide="sparkles" class="w-5 h-5"></i> 產生集會指引
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- AI Response Area -->
+                    <div id="ai-response-container" class="hidden border border-slate-200 rounded-xl p-6 bg-slate-50 space-y-4 relative">
+                        <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+                            <div class="flex items-center gap-2">
+                                <div class="bg-emerald-100 p-1.5 rounded-lg text-emerald-800">
+                                    <i data-lucide="bot" class="w-5 h-5"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-800">AI 智能集會企劃案</h4>
+                            </div>
+                            <button onclick="copyAIGuideToClipboard()" class="text-slate-500 hover:text-slate-800 text-xs font-semibold flex items-center gap-1">
+                                <i data-lucide="copy" class="w-4 h-4"></i> 複製指引
+                            </button>
+                        </div>
+                        <!-- Loader -->
+                        <div id="ai-loader" class="hidden flex flex-col items-center justify-center py-12 space-y-3">
+                            <div class="w-10 h-10 border-4 border-scout-green border-t-transparent rounded-full animate-spin"></div>
+                            <p class="text-xs text-slate-400">正在查閱小童軍最新活動手冊與智能設計中，請稍候...</p>
+                        </div>
+                        <!-- Content -->
+                        <div id="ai-content-box" class="prose max-w-none text-sm text-slate-700 leading-relaxed whitespace-pre-wrap font-sans font-medium">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 8. SETTINGS TAB -->
+            <section id="tab-settings" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800">數據庫管理與手機 Excel 匯出</h3>
+                        <p class="text-xs text-slate-500 mt-1">您可以手動一鍵還原雲端數據庫，也可以在手機上直接下載全套數據的 Excel 報表文件。</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Excel Direct Download Card -->
+                        <div class="p-4 border border-emerald-100 rounded-xl bg-emerald-50/50 flex flex-col justify-between space-y-3">
+                            <div>
+                                <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-black uppercase">熱門推薦</span>
+                                <h4 class="font-black text-slate-800 text-sm mt-1.5 flex items-center gap-1.5">
+                                    <i data-lucide="file-spreadsheet" class="text-emerald-700 w-5 h-5"></i>
+                                    手機直接導出 Excel
+                                </h4>
+                                <p class="text-xs text-slate-500 mt-1">產生包含「名冊」、「出席與是日主題」、「季度旅費」、「徽章紀錄」的多分頁 Excel 報表。</p>
+                            </div>
+                            <button onclick="exportToExcel()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-4 py-2.5 rounded-lg font-bold transition flex items-center justify-center gap-2">
+                                <i data-lucide="download" class="w-4 h-4"></i> 匯出 Excel 文件 (.xlsx)
+                            </button>
+                        </div>
+
+                        <div class="p-4 border border-slate-100 rounded-xl bg-slate-50 flex flex-col justify-between space-y-3">
+                            <div>
+                                <h4 class="font-bold text-slate-700 text-sm">本地備份 JSON</h4>
+                                <p class="text-xs text-slate-400 mt-1">下載雲端全體數據的純文本 JSON 檔案（供未來資料還原使用）。</p>
+                            </div>
+                            <button onclick="exportData()" class="w-full bg-scout-green hover:bg-scout-dark text-white text-xs px-4 py-2.5 rounded-lg font-bold transition flex items-center justify-center gap-2">
+                                <i data-lucide="download" class="w-4 h-4"></i> 匯出備份 JSON
+                            </button>
+                        </div>
+
+                        <div class="p-4 border border-slate-100 rounded-xl bg-slate-50 flex flex-col justify-between space-y-3">
+                            <div>
+                                <h4 class="font-bold text-slate-700 text-sm">數據快速重設</h4>
+                                <p class="text-xs text-slate-400 mt-1">清除雲端並重新寫入 24 位小童軍與 4 名領袖的標準初始數據。</p>
+                            </div>
+                            <button onclick="triggerResetDefault()" class="w-full bg-amber-500 hover:bg-amber-600 text-white text-xs px-4 py-2.5 rounded-lg font-bold transition flex items-center justify-center gap-2">
+                                <i data-lucide="refresh-cw" class="w-4 h-4"></i> 初始化雲端資料庫
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- CUSTOM CONFIRM MODAL -->
+    <div id="confirm-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl text-center space-y-4 mx-4 animate-in fade-in duration-200">
+            <div class="text-rose-600 flex justify-center">
+                <i data-lucide="alert-triangle" class="w-12 h-12"></i>
+            </div>
+            <h4 class="font-bold text-slate-800 text-lg">操作確認</h4>
+            <p id="confirm-modal-msg" class="text-sm text-slate-500">此動作將無法復原，確定要繼續嗎？</p>
+            <div class="flex gap-3 justify-center">
+                <button id="confirm-modal-cancel" class="px-4 py-2 border border-slate-200 text-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-50 transition">取消</button>
+                <button id="confirm-modal-confirm" class="px-4 py-2 bg-rose-600 text-white rounded-lg text-xs font-semibold hover:bg-rose-700 transition">確定繼續</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FOR ADDING MEMBER/LEADER -->
+    <div id="add-member-modal" class="fixed inset-0 bg-black/50 z-40 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4 mx-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h4 id="modal-title" class="font-bold text-slate-800">新增小童軍成員</h4>
+                <button onclick="closeAddMemberModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form id="add-member-form" onsubmit="handleModalSubmit(event)" class="space-y-4 text-sm">
+                <input type="hidden" id="modal-type" value="member">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">編號</label>
+                    <input type="text" id="modal-id" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-700" placeholder="例如: GS-2026-25 或 L-05">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">姓名</label>
+                    <input type="text" id="modal-name" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-700" placeholder="姓名">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-1">性別</label>
+                        <select id="modal-gender" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-700">
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                        </select>
+                    </div>
+                    <div id="age-field-container">
+                        <label class="block text-xs font-bold text-slate-400 mb-1">年齡 / 職位</label>
+                        <input type="text" id="modal-age-role" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-700" placeholder="年齡">
+                    </div>
+                </div>
+                <div id="custom-field-container">
+                    <label class="block text-xs font-bold text-slate-400 mb-1">宣誓日期 / 聯絡電話</label>
+                    <input type="text" id="modal-custom" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-700" placeholder="宣誓日期">
+                </div>
+                <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+                    <button type="button" onclick="closeAddMemberModal()" class="px-4 py-2 border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition font-medium">取消</button>
+                    <button type="submit" class="px-5 py-2 bg-scout-green text-white rounded-lg hover:bg-scout-dark transition font-medium">確認儲存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase Script Integrations & Main Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+  apiKey: "AIzaSyA6BHEL8by-qEoa_5gxeuPlvcNXzQWnI_s",
+  authDomain: "scout-1787gs.firebaseapp.com",
+  projectId: "scout-1787gs",
+  storageBucket: "scout-1787gs.firebasestorage.app",
+  messagingSenderId: "251998971887",
+  appId: "1:251998971887:web:183f8a2184130acced781a"
+};
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        // Core App Data Object (Synchronized in real-time)
+        window.appData = {
+            members: [],
+            leaders: [],
+            attendanceHistory: {},
+            feesHistory: {},
+            awardsRecord: []
+        };
+
+        let currentUser = null;
+
+        // Default local static lists for database bootstrapping
+        const defaultMembers = [
+            { id: "GS-2026-01", name: "陳小明", gender: "男", age: "5", investitureDate: "2026-01-10", progress: {} },
+            { id: "GS-2026-02", name: "李心怡", gender: "女", age: "6", investitureDate: "2026-01-10", progress: {} },
+            { id: "GS-2026-03", name: "張家樂", gender: "男", age: "4", investitureDate: "2026-02-14", progress: {} },
+            { id: "GS-2026-04", name: "黃曉彤", gender: "女", age: "5", investitureDate: "2026-02-14", progress: {} },
+            { id: "GS-2026-05", name: "何梓軒", gender: "男", age: "7", investitureDate: "2025-10-18", progress: {} },
+            { id: "GS-2026-06", name: "林芷晴", gender: "女", age: "6", investitureDate: "2025-10-18", progress: {} },
+            { id: "GS-2026-07", name: "梁宇軒", gender: "男", age: "5", investitureDate: "2026-03-07", progress: {} },
+            { id: "GS-2026-08", name: "吳雨霏", gender: "女", age: "5", investitureDate: "2026-03-07", progress: {} },
+            { id: "GS-2026-09", name: "郭子豪", gender: "男", age: "6", investitureDate: "2025-11-22", progress: {} },
+            { id: "GS-2026-10", name: "曾美琪", gender: "女", age: "7", investitureDate: "2025-05-15", progress: {} },
+            { id: "GS-2026-11", name: "蔡睿謙", gender: "男", age: "5", investitureDate: "2026-04-04", progress: {} },
+            { id: "GS-2026-12", name: "許思敏", gender: "女", age: "4", investitureDate: "2026-04-04", progress: {} },
+            { id: "GS-2026-13", name: "鄭傲天", gender: "男", age: "6", investitureDate: "2025-12-05", progress: {} },
+            { id: "GS-2026-14", name: "謝梓瀅", gender: "女", age: "5", investitureDate: "2025-12-05", progress: {} },
+            { id: "GS-2026-15", name: "鄧卓然", gender: "男", age: "7", investitureDate: "2025-08-09", progress: {} },
+            { id: "GS-2026-16", name: "馮雅婷", gender: "女", age: "6", investitureDate: "2025-08-09", progress: {} },
+            { id: "GS-2026-17", name: "曾浩然", gender: "男", age: "5", investitureDate: "2026-05-10", progress: {} },
+            { id: "GS-2026-18", name: "盧可晴", gender: "女", age: "5", investitureDate: "2026-05-10", progress: {} },
+            { id: "GS-2026-19", name: "鍾嘉熙", gender: "男", age: "6", investitureDate: "2025-09-13", progress: {} },
+            { id: "GS-2026-20", name: "羅曦媛", gender: "女", age: "7", investitureDate: "2025-09-13", progress: {} },
+            { id: "GS-2026-21", name: "胡梓謙", gender: "男", age: "4", investitureDate: "2026-05-23", progress: {} },
+            { id: "GS-2026-22", name: "潘諾依", gender: "女", age: "5", investitureDate: "2026-05-23", progress: {} },
+            { id: "GS-2026-23", name: "袁俊生", gender: "男", age: "6", investitureDate: "2025-07-11", progress: {} },
+            { id: "GS-2026-24", name: "姚巧瑩", gender: "女", age: "5", investitureDate: "2025-07-11", progress: {} }
+        ];
+
+        const defaultLeaders = [
+            { id: "L-01", name: "盧小草", role: "小童軍團領袖 (GSL)", gender: "女", phone: "9123-4567" },
+            { id: "L-02", name: "葉翠林", role: "副小童軍團領袖 (AGSL)", gender: "男", phone: "9876-5432" },
+            { id: "L-03", name: "陳大木", role: "副小童軍團領袖 (AGSL)", gender: "男", phone: "9234-5678" },
+            { id: "L-04", name: "林水滴", role: "教練領袖 (Instructor)", gender: "女", phone: "9345-6789" }
+        ];
+
+        // 7 Categories matching current manual
+        window.progressSchema = [
+            {
+                id: "cat1",
+                title: "我愛自己及家庭",
+                items: ["認識自己及家庭關係", "日常基本自理能力與個人衛生", "情緒表達與管理", "了解家庭成員責任"]
+            },
+            {
+                id: "cat2",
+                title: "我愛運動與健康",
+                items: ["日常運動體驗", "健康飲食習慣養成", "基礎身體協調性運動", "個人興趣與才華探索"]
+            },
+            {
+                id: "cat3",
+                title: "我愛創新",
+                items: ["藝術創作與畫畫", "音樂與歌唱活動", "攝影或短片紀錄體驗", "創意勞作與手工DIY"]
+            },
+            {
+                id: "cat4",
+                title: "我愛戶外",
+                items: ["探索公園與大自然", "露營/宿營或短途遠足", "戶外綠色環保實踐", "原野烹飪簡單體驗"]
+            },
+            {
+                id: "cat5",
+                title: "我愛科學與大自然",
+                items: ["天文與天象觀察", "動植物與自然奇趣", "天氣的認知與紀錄", "利用大自然元素進行創作", "科學小實驗/電子安全使用"]
+            },
+            {
+                id: "cat6",
+                title: "我愛國家與社區",
+                items: ["認識自己社區及設施", "遵守社區規律與禮儀", "認識國家傳統節日", "參觀社區歷史名勝"]
+            },
+            {
+                id: "cat7",
+                title: "我愛童軍大家庭",
+                items: ["學習小童軍誓詞與規律", "認識小童軍集會禮儀", "參與旅團聯誼大集會", "認識世界童軍運動大同"]
+            }
+        ];
+
+        // Custom Confirm Modal Helper
+        let onConfirmAction = null;
+        window.showConfirmModal = function(message, action) {
+            document.getElementById("confirm-modal-msg").innerText = message;
+            onConfirmAction = action;
+            document.getElementById("confirm-modal").classList.remove("hidden");
+        }
+        window.closeConfirmModal = function() {
+            document.getElementById("confirm-modal").classList.add("hidden");
+            onConfirmAction = null;
+        }
+
+        // INIT AND LISTENERS
+        async function initApp() {
+            // Setup custom modal cancel/confirm actions
+            document.getElementById("confirm-modal-cancel").onclick = window.closeConfirmModal;
+            document.getElementById("confirm-modal-confirm").onclick = function() {
+                if (onConfirmAction) onConfirmAction();
+                window.closeConfirmModal();
+            };
+
+            // Setup Date pickers & Select items
+            setupDatePickers();
+            setupYearSelect();
+            startCountdown();
+
+            // Run clock
+            setInterval(updateClock, 1000);
+
+            // AUTHENTICATION FIRST (Rule 3)
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.error("Auth initialization error:", err);
+                showToast("雲端安全認證失敗，請重新整理網頁", "error");
+            }
+
+            // Auth state handler
+            onAuthStateChanged(auth, (user) => {
+                currentUser = user;
+                if (user) {
+                    document.getElementById("sync-status-badge").innerHTML = `
+                        <span class="inline-block w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse mr-1.5"></span>
+                        雲端同步中 (UID: ${user.uid.substring(0, 6)})
+                    `;
+                    // Setup real-time cloud triggers
+                    setupCloudListeners();
+                } else {
+                    document.getElementById("sync-status-badge").innerHTML = `
+                        <span class="inline-block w-2.5 h-2.5 bg-rose-500 rounded-full mr-1.5"></span>
+                        未登入 / 離線模式
+                    `;
+                }
+            });
+        }
+
+        // SEED INITIAL CLOUD STRUCTURE IF ENTIRELY EMPTY
+        async function seedCloudData() {
+            if (!currentUser) return;
+            showToast("檢測到新雲端資料庫，正在為您的旅團導入預設數據...", "info");
+
+            // Write 24 default members
+            for (const m of defaultMembers) {
+                const initProgress = {};
+                window.progressSchema.forEach(cat => {
+                    initProgress[cat.id] = {};
+                });
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'scouts', m.id), {
+                    name: m.name,
+                    gender: m.gender,
+                    age: m.age,
+                    investitureDate: m.investitureDate,
+                    progress: initProgress
+                });
+            }
+
+            // Write 4 default leaders
+            for (const l of defaultLeaders) {
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'leaders', l.id), l);
+            }
+
+            // Write 1 demo award
+            const demoAward = { id: "AWRD-01", memberId: "GS-2026-01", name: "陳小明", item: "我愛科學與大自然範疇證書", date: "2026-05-15" };
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'awards', demoAward.id), demoAward);
+
+            showToast("雲端初始設定已完成！所有領袖可共同進行協作。", "success");
+        }
+
+        // REAL-TIME FIRESTORE LISTENERS
+        function setupCloudListeners() {
+            if (!currentUser) return;
+
+            // 1. Members Sync
+            const scoutsRef = collection(db, 'artifacts', appId, 'public', 'data', 'scouts');
+            onSnapshot(scoutsRef, (snapshot) => {
+                const list = [];
+                snapshot.forEach(doc => {
+                    list.push({ id: doc.id, ...doc.data() });
+                });
+                
+                if (list.length === 0) {
+                    seedCloudData();
+                } else {
+                    window.appData.members = list;
+                    refreshCurrentTab();
+                }
+            }, (error) => {
+                console.error("Error syncing members:", error);
+            });
+
+            // 2. Leaders Sync
+            const leadersRef = collection(db, 'artifacts', appId, 'public', 'data', 'leaders');
+            onSnapshot(leadersRef, (snapshot) => {
+                const list = [];
+                snapshot.forEach(doc => {
+                    list.push({ id: doc.id, ...doc.data() });
+                });
+                window.appData.leaders = list;
+                refreshCurrentTab();
+            }, (error) => {
+                console.error("Error syncing leaders:", error);
+            });
+
+            // 3. Attendance Sync (Including theme attribute)
+            const attendanceRef = collection(db, 'artifacts', appId, 'public', 'data', 'attendance');
+            onSnapshot(attendanceRef, (snapshot) => {
+                const history = {};
+                snapshot.forEach(doc => {
+                    history[doc.id] = doc.data();
+                });
+                window.appData.attendanceHistory = history;
+                
+                const dateStr = document.getElementById("attendance-date").value;
+                const themeInput = document.getElementById("attendance-theme");
+                if (themeInput && document.activeElement !== themeInput) {
+                    themeInput.value = history[dateStr]?.theme || "";
+                }
+
+                refreshCurrentTab();
+            }, (error) => {
+                console.error("Error syncing attendance:", error);
+            });
+
+            // 4. Fees Sync
+            const feesRef = collection(db, 'artifacts', appId, 'public', 'data', 'fees');
+            onSnapshot(feesRef, (snapshot) => {
+                const history = {};
+                snapshot.forEach(doc => {
+                    history[doc.id] = doc.data();
+                });
+                window.appData.feesHistory = history;
+                refreshCurrentTab();
+            }, (error) => {
+                console.error("Error syncing fees:", error);
+            });
+
+            // 5. Awards Sync
+            const awardsRef = collection(db, 'artifacts', appId, 'public', 'data', 'awards');
+            onSnapshot(awardsRef, (snapshot) => {
+                const list = [];
+                snapshot.forEach(doc => {
+                    list.push({ id: doc.id, ...doc.data() });
+                });
+                window.appData.awardsRecord = list;
+                refreshCurrentTab();
+            }, (error) => {
+                console.error("Error syncing awards:", error);
+            });
+        }
+
+        // TRIGGER VIEW UPDATES WHEN DATA COMES IN
+        function refreshCurrentTab() {
+            updateDashboardStats();
+            renderRosters();
+            renderAttendanceList();
+            renderFeeTracker();
+            populateProgressSelector();
+            populateCertSelector();
+            renderAwardsRecords();
+            lucide.createIcons();
+        }
+
+        // INTERACTION MODULES LINKED TO CLOUD WRITES
+        window.saveRosterMemberCloud = async function(type, id, data) {
+            if (!currentUser) return;
+            const collectionName = type === 'member' ? 'scouts' : 'leaders';
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', collectionName, id);
+            await setDoc(docRef, data);
+        }
+
+        window.removeRosterItemCloud = async function(type, id) {
+            if (!currentUser) return;
+            const collectionName = type === 'member' ? 'scouts' : 'leaders';
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', collectionName, id);
+            await deleteDoc(docRef);
+        }
+
+        window.saveAttendanceCloud = async function(dateStr, stateMap, themeStr) {
+            if (!currentUser) return;
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'attendance', dateStr);
+            await setDoc(docRef, { ...stateMap, theme: themeStr });
+        }
+
+        window.saveFeeCloud = async function(key, memberId, paidState) {
+            if (!currentUser) return;
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'fees', key);
+            await setDoc(docRef, { [memberId]: paidState }, { merge: true });
+        }
+
+        window.saveBulkFeeCloud = async function(key, fullMap) {
+            if (!currentUser) return;
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'fees', key);
+            await setDoc(docRef, fullMap);
+        }
+
+        window.saveMemberProgressCloud = async function(memberId, progressMap) {
+            if (!currentUser) return;
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'scouts', memberId);
+            await updateDoc(docRef, { progress: progressMap });
+        }
+
+        window.addAwardCloud = async function(record) {
+            if (!currentUser) return;
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'awards', record.id);
+            await setDoc(docRef, record);
+        }
+
+        window.deleteAwardCloud = async function(recordId) {
+            if (!currentUser) return;
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'awards', recordId);
+            await deleteDoc(docRef);
+        }
+
+        // RESET SYSTEM CORE
+        window.triggerResetDefault = function() {
+            showConfirmModal("此操作將完全清除目前雲端的所有數據，並回復為預設24名小童軍及4名領袖。確定要繼續嗎？", async () => {
+                seedCloudData();
+            });
+        }
+
+        // Run Init on DOM Ready
+        window.addEventListener("DOMContentLoaded", initApp);
+    </script>
+
+    <!-- App State and Legacy View Controllers -->
+    <script>
+        let activeTab = "dashboard";
+        let activeRosterView = "members";
+        let activeAttendanceRole = "members";
+
+        // TOAST SYSTEM
+        function showToast(message, type = "success") {
+            const container = document.getElementById("toast-container");
+            const toast = document.createElement("div");
+            toast.className = `p-4 rounded-xl shadow-lg border text-sm font-semibold flex items-center gap-3 transition-all transform duration-300 translate-y-2 opacity-0 max-w-sm ${
+                type === "success" 
+                    ? "bg-emerald-50 border-emerald-200 text-emerald-800" 
+                    : type === "error" 
+                    ? "bg-rose-50 border-rose-200 text-rose-800" 
+                    : "bg-blue-50 border-blue-200 text-blue-800"
+            }`;
+            
+            const icon = type === "success" ? "check-circle" : type === "error" ? "alert-circle" : "info";
+            toast.innerHTML = `<i data-lucide="${icon}" class="w-5 h-5 flex-shrink-0"></i> <span>${message}</span>`;
+            
+            container.appendChild(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                toast.classList.remove("translate-y-2", "opacity-0");
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.add("opacity-0", "translate-y-2");
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // DIRECT EXCEL EXPORT (USING SHEETJS CLIENT-SIDE)
+        window.exportToExcel = function() {
+            try {
+                showToast("正在建立 Excel 報表，請稍候...", "info");
+                const wb = XLSX.utils.book_new();
+
+                // 1. 小童軍成員工作表
+                const memberRows = window.appData.members.map(m => ({
+                    "會員編號": m.id,
+                    "姓名": m.name,
+                    "性別": m.gender,
+                    "年齡": m.age + " 歲",
+                    "宣誓日期": m.investitureDate
+                }));
+                const wsMembers = XLSX.utils.json_to_sheet(memberRows);
+                XLSX.utils.book_append_sheet(wb, wsMembers, "小童軍成員名冊");
+
+                // 2. 領袖工作表
+                const leaderRows = window.appData.leaders.map(l => ({
+                    "領袖編號": l.id,
+                    "姓名": l.name,
+                    "職位": l.role,
+                    "性別": l.gender,
+                    "聯絡電話": l.phone
+                }));
+                const wsLeaders = XLSX.utils.json_to_sheet(leaderRows);
+                XLSX.utils.book_append_sheet(wb, wsLeaders, "團領袖名冊");
+
+                // 3. 出席與是日主題紀錄工作表
+                const attendanceRows = [];
+                Object.keys(window.appData.attendanceHistory).forEach(date => {
+                    const dayData = window.appData.attendanceHistory[date];
+                    const theme = dayData.theme || "未設定";
+
+                    // Members attendance
+                    window.appData.members.forEach(m => {
+                        const status = dayData[m.id] || "unmarked";
+                        const statusText = status === "present" ? "出席" : status === "excused" ? "請假" : status === "absent" ? "缺席" : "未點名";
+                        attendanceRows.push({
+                            "集會日期": date,
+                            "是日主題": theme,
+                            "類別": "小童軍成員",
+                            "人員編號": m.id,
+                            "人員姓名": m.name,
+                            "出席狀態": statusText
+                        });
+                    });
+
+                    // Leaders attendance
+                    window.appData.leaders.forEach(l => {
+                        const status = dayData[l.id] || "unmarked";
+                        const statusText = status === "present" ? "出席" : status === "excused" ? "請假" : status === "absent" ? "缺席" : "未點名";
+                        attendanceRows.push({
+                            "集會日期": date,
+                            "是日主題": theme,
+                            "類別": "團領袖",
+                            "人員編號": l.id,
+                            "人員姓名": l.name,
+                            "出席狀態": statusText
+                        });
+                    });
+                });
+                
+                // Sort by date descending
+                attendanceRows.sort((a, b) => new Date(b["集會日期"]) - new Date(a["集會日期"]));
+                
+                const wsAttendance = XLSX.utils.json_to_sheet(attendanceRows);
+                XLSX.utils.book_append_sheet(wb, wsAttendance, "集會出席與主題");
+
+                // 4. 季度旅費收繳紀錄工作表
+                const feeRows = [];
+                Object.keys(window.appData.feesHistory).forEach(quarterKey => {
+                    const quarterData = window.appData.feesHistory[quarterKey];
+                    const [year, quarter] = quarterKey.split("_");
+                    const quarterName = `${year}年第${quarter === "1" ? "一" : quarter === "4" ? "二" : quarter === "7" ? "三" : "四"}季`;
+
+                    window.appData.members.forEach(m => {
+                        const paid = quarterData[m.id] === true;
+                        feeRows.push({
+                            "收費季度": quarterName,
+                            "小童軍編號": m.id,
+                            "小童軍姓名": m.name,
+                            "旅費金額": 150,
+                            "收繳狀態": paid ? "已付款" : "未付款"
+                        });
+                    });
+                });
+                const wsFees = XLSX.utils.json_to_sheet(feeRows);
+                XLSX.utils.book_append_sheet(wb, wsFees, "季度旅費收繳紀錄");
+
+                // 5. 獎勵徽章登錄紀錄工作表
+                const awardRows = window.appData.awardsRecord.map(r => ({
+                    "獲發日期": r.date,
+                    "成員編號": r.memberId,
+                    "成員姓名": r.name,
+                    "榮譽獎勵項目": r.item
+                }));
+                // Sort by award date
+                awardRows.sort((a, b) => new Date(b["獲發日期"]) - new Date(a["獲發日期"]));
+                
+                const wsAwards = XLSX.utils.json_to_sheet(awardRows);
+                XLSX.utils.book_append_sheet(wb, wsAwards, "獎勵徽章登錄紀錄");
+
+                // Trigger direct file download
+                XLSX.writeFile(wb, `小童軍旅團管理報表_${new Date().toISOString().split('T')[0]}.xlsx`);
+                showToast("Excel 文件已成功下載至您的手機！", "success");
+            } catch (e) {
+                console.error("Excel generation error:", e);
+                showToast("Excel 導出時發生錯誤", "error");
+            }
+        }
+
+        // DASHBOARD REFRESH
+        function updateDashboardStats() {
+            if (!document.getElementById("dash-scout-count")) return;
+            document.getElementById("dash-scout-count").innerText = `${window.appData.members.length} / 24`;
+            document.getElementById("dash-leader-count").innerText = `${window.appData.leaders.length}`;
+
+            // Fee computations
+            const year = "2026";
+            const q = "4"; 
+            const key = `${year}_${q}`;
+            const history = window.appData.feesHistory[key] || {};
+            let paidCount = 0;
+            window.appData.members.forEach(m => {
+                if (history[m.id] === true) paidCount++;
+            });
+            document.getElementById("dash-fee-status").innerText = `$${paidCount * 150} / $${window.appData.members.length * 150}`;
+
+            // Attendance & Theme computations
+            const todayStr = document.getElementById("attendance-date").value;
+            const attToday = window.appData.attendanceHistory[todayStr];
+            if (attToday) {
+                let present = 0;
+                let counted = 0;
+                window.appData.members.forEach(m => {
+                    counted++;
+                    if (attToday[m.id] === 'present') present++;
+                });
+                document.getElementById("dash-attendance-rate").innerText = counted === 0 ? "0%" : `${Math.round((present/counted)*100)}%`;
+                
+                // Set Theme Title in dashboard card
+                const currentTheme = attToday.theme || "";
+                document.getElementById("dash-meeting-theme").innerText = currentTheme ? `主題: ${currentTheme}` : "主題: 未設定";
+                document.getElementById("dash-meeting-theme").title = currentTheme ? `集會主題: ${currentTheme}` : "無主題說明";
+            } else {
+                document.getElementById("dash-attendance-rate").innerText = "今日未點名";
+                document.getElementById("dash-meeting-theme").innerText = "主題: 未設定";
+            }
+        }
+
+        // TAB SWITCHER
+        window.switchTab = function(tabId) {
+            activeTab = tabId;
+            document.querySelectorAll(".tab-content").forEach(el => el.classList.add("hidden"));
+            document.getElementById(`tab-${tabId}`).classList.remove("hidden");
+            
+            document.querySelectorAll(".nav-btn").forEach(el => {
+                el.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition text-scout-light opacity-85 hover:bg-scout-green hover:opacity-100";
+            });
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if (activeBtn) {
+                activeBtn.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition bg-scout-green text-white font-medium";
+            }
+
+            const titles = {
+                dashboard: "儀表板 Dashboard",
+                roster: "成員及領袖名冊 Directory",
+                attendance: "一鍵點名系統 Attendance",
+                fees: "季度旅費管理 Subscription Fees",
+                progress: "小草蜢體驗進度 Record Progress",
+                certificate: "獎勵證書紀錄 Awards Record",
+                "ai-guide": "AI 領袖集會指引 Scout Leader Assistant",
+                settings: "雲端數據管理 Cloud Settings"
+            };
+            document.getElementById("page-title").innerText = titles[tabId] || "系統";
+
+            if (tabId === "dashboard") {
+                updateDashboardStats();
+            } else if (tabId === "attendance") {
+                renderAttendanceList();
+            } else if (tabId === "fees") {
+                renderFeeTracker();
+            } else if (tabId === "progress") {
+                populateProgressSelector();
+                loadMemberProgress();
+            } else if (tabId === "certificate") {
+                populateCertSelector();
+                renderAwardsRecords();
+            }
+            lucide.createIcons();
+        }
+
+        // CLOCK & TIMERS
+        function updateClock() {
+            const now = new Date();
+            const days = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+            const formatted = `${now.getFullYear()}年${String(now.getMonth()+1).padStart(2, '0')}月${String(now.getDate()).padStart(2, '0')}日 (${days[now.getDay()]}) ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+            if (document.getElementById("current-date-time")) {
+                document.getElementById("current-date-time").innerText = formatted;
+            }
+        }
+
+        function setupDatePickers() {
+            const today = new Date();
+            const todayDay = today.getDay();
+            const daysToSaturday = (6 - todayDay + 7) % 7;
+            const nextSaturday = new Date(today);
+            nextSaturday.setDate(today.getDate() + daysToSaturday);
+            
+            const dateStr = nextSaturday.toISOString().split('T')[0];
+            document.getElementById("attendance-date").value = dateStr;
+            document.getElementById("cert-date").value = today.toISOString().split('T')[0];
+        }
+
+        function setupYearSelect() {
+            const select = document.getElementById("fee-year-select");
+            select.innerHTML = "";
+            for (let year = 2026; year <= 2035; year++) {
+                const opt = document.createElement("option");
+                opt.value = year;
+                opt.innerText = `${year} 年`;
+                select.appendChild(opt);
+            }
+        }
+
+        function startCountdown() {
+            function updateCountdown() {
+                const now = new Date();
+                let nextSat = new Date();
+                nextSat.setDate(now.getDate() + ((6 - now.getDay() + 7) % 7));
+                nextSat.setHours(19, 15, 0, 0);
+
+                if (now.getDay() === 6 && now.getTime() > nextSat.getTime()) {
+                    nextSat.setDate(nextSat.getDate() + 7);
+                }
+
+                const diff = nextSat.getTime() - now.getTime();
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+                if (document.getElementById("countdown-days")) {
+                    document.getElementById("countdown-days").innerText = String(days).padStart(2, '0');
+                    document.getElementById("countdown-hours").innerText = String(hours).padStart(2, '0');
+                    document.getElementById("countdown-mins").innerText = String(mins).padStart(2, '0');
+                }
+            }
+            updateCountdown();
+            setInterval(updateCountdown, 60000);
+        }
+
+        // ROSTER INTERACTIVE VIEW
+        window.toggleRosterView = function(view) {
+            activeRosterView = view;
+            if (view === "members") {
+                document.getElementById("roster-members-view").classList.remove("hidden");
+                document.getElementById("roster-leaders-view").classList.add("hidden");
+                document.getElementById("btn-view-members").className = "px-6 py-3 border-b-2 border-scout-green text-scout-green font-bold text-sm";
+                document.getElementById("btn-view-leaders").className = "px-6 py-3 border-b-2 border-transparent text-slate-500 font-medium hover:text-slate-800 text-sm";
+            } else {
+                document.getElementById("roster-members-view").classList.add("hidden");
+                document.getElementById("roster-leaders-view").classList.remove("hidden");
+                document.getElementById("btn-view-members").className = "px-6 py-3 border-b-2 border-transparent text-slate-500 font-medium hover:text-slate-800 text-sm";
+                document.getElementById("btn-view-leaders").className = "px-6 py-3 border-b-2 border-scout-green text-scout-green font-bold text-sm";
+            }
+            renderRosters();
+        }
+
+        function renderRosters() {
+            const mBody = document.getElementById("member-table-body");
+            if (!mBody) return;
+            mBody.innerHTML = "";
+            window.appData.members.forEach((m) => {
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-slate-50 transition";
+                tr.innerHTML = `
+                    <td class="p-4 font-mono font-semibold text-slate-600">${m.id}</td>
+                    <td class="p-4 font-bold text-slate-800">${m.name}</td>
+                    <td class="p-4">${m.gender}</td>
+                    <td class="p-4">${m.age} 歲</td>
+                    <td class="p-4 text-slate-500">${m.investitureDate}</td>
+                    <td class="p-4 text-right">
+                        <button onclick="removeRosterItem('member', '${m.id}')" class="text-rose-600 hover:text-rose-900 font-semibold text-xs ml-2">刪除</button>
+                    </td>
+                `;
+                mBody.appendChild(tr);
+            });
+
+            const lBody = document.getElementById("leader-table-body");
+            if (!lBody) return;
+            lBody.innerHTML = "";
+            window.appData.leaders.forEach((l) => {
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-slate-50 transition";
+                tr.innerHTML = `
+                    <td class="p-4 font-mono font-semibold text-slate-600">${l.id}</td>
+                    <td class="p-4 font-bold text-slate-800">${l.name}</td>
+                    <td class="p-4 text-emerald-800 font-medium">${l.role}</td>
+                    <td class="p-4">${l.gender}</td>
+                    <td class="p-4 text-slate-600 font-mono">${l.phone}</td>
+                    <td class="p-4 text-right">
+                        <button onclick="removeRosterItem('leader', '${l.id}')" class="text-rose-600 hover:text-rose-900 font-semibold text-xs ml-2">刪除</button>
+                    </td>
+                `;
+                lBody.appendChild(tr);
+            });
+        }
+
+        window.removeRosterItem = function(type, id) {
+            showConfirmModal(`確定要自雲端刪除此${type === 'member' ? '成員' : '領袖'}嗎？此操作將即時同步。`, async () => {
+                await removeRosterItemCloud(type, id);
+                showToast("已成功雲端刪除成員");
+            });
+        }
+
+        window.openAddMemberModal = function(type) {
+            document.getElementById("modal-type").value = type;
+            document.getElementById("modal-id").value = type === 'member' 
+                ? `GS-2026-${String(window.appData.members.length + 1).padStart(2, '0')}`
+                : `L-0${window.appData.leaders.length + 1}`;
+            document.getElementById("modal-name").value = "";
+            document.getElementById("modal-gender").value = "男";
+            
+            if (type === 'member') {
+                document.getElementById("modal-title").innerText = "新增小童軍成員 (同步雲端)";
+                document.getElementById("age-field-container").innerHTML = `
+                    <label class="block text-xs font-bold text-slate-400 mb-1">年齡 (4-7歲)</label>
+                    <input type="number" id="modal-age-role" min="4" max="7" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-700" value="5">
+                `;
+                document.getElementById("custom-field-container").innerHTML = `
+                    <label class="block text-xs font-bold text-slate-400 mb-1">宣誓日期</label>
+                    <input type="date" id="modal-custom" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-700" value="2026-05-30">
+                `;
+            } else {
+                document.getElementById("modal-title").innerText = "新增團領袖 (同步雲端)";
+                document.getElementById("age-field-container").innerHTML = `
+                    <label class="block text-xs font-bold text-slate-400 mb-1">職位名稱</label>
+                    <input type="text" id="modal-age-role" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-700" placeholder="例如: 副小童軍團領袖 (AGSL)">
+                `;
+                document.getElementById("custom-field-container").innerHTML = `
+                    <label class="block text-xs font-bold text-slate-400 mb-1">聯絡電話</label>
+                    <input type="text" id="modal-custom" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-700" placeholder="0000-0000">
+                `;
+            }
+            document.getElementById("add-member-modal").classList.remove("hidden");
+        }
+
+        window.closeAddMemberModal = function() {
+            document.getElementById("add-member-modal").classList.add("hidden");
+        }
+
+        window.handleModalSubmit = async function(event) {
+            event.preventDefault();
+            const type = document.getElementById("modal-type").value;
+            const id = document.getElementById("modal-id").value;
+            const name = document.getElementById("modal-name").value;
+            const gender = document.getElementById("modal-gender").value;
+            const age_role = document.getElementById("modal-age-role").value;
+            const custom = document.getElementById("modal-custom").value;
+
+            let dataObject = {};
+            if (type === 'member') {
+                const progressInit = {};
+                window.progressSchema.forEach(c => progressInit[c.id] = {});
+                dataObject = {
+                    name: name,
+                    gender: gender,
+                    age: age_role,
+                    investitureDate: custom,
+                    progress: progressInit
+                };
+            } else {
+                dataObject = {
+                    name: name,
+                    role: age_role,
+                    gender: gender,
+                    phone: custom
+                };
+            }
+
+            await saveRosterMemberCloud(type, id, dataObject);
+            closeAddMemberModal();
+            showToast(`成功雲端新增 ${name}`);
+        }
+
+        // ROLL CALL MODULE
+        window.toggleAttendanceRole = function(role) {
+            activeAttendanceRole = role;
+            const btnMem = document.getElementById("btn-att-members");
+            const btnLead = document.getElementById("btn-att-leaders");
+            
+            if (role === "members") {
+                btnMem.className = "flex-1 py-2 text-center text-xs font-bold rounded-lg transition bg-white text-scout-dark shadow-sm";
+                btnLead.className = "flex-1 py-2 text-center text-xs font-bold rounded-lg transition text-slate-500 hover:text-slate-800";
+            } else {
+                btnLead.className = "flex-1 py-2 text-center text-xs font-bold rounded-lg transition bg-white text-scout-dark shadow-sm";
+                btnMem.className = "flex-1 py-2 text-center text-xs font-bold rounded-lg transition text-slate-500 hover:text-slate-800";
+            }
+            renderAttendanceList();
+        }
+
+        function getActiveAttendanceState() {
+            const dateStr = document.getElementById("attendance-date").value;
+            if (!window.appData.attendanceHistory[dateStr]) {
+                window.appData.attendanceHistory[dateStr] = {};
+            }
+            return window.appData.attendanceHistory[dateStr];
+        }
+
+        window.handleDateChange = function() {
+            const dateStr = document.getElementById("attendance-date").value;
+            const currentTheme = window.appData.attendanceHistory[dateStr]?.theme || "";
+            document.getElementById("attendance-theme").value = currentTheme;
+            renderAttendanceList();
+            updateDashboardStats();
+        }
+
+        window.renderAttendanceList = function() {
+            const container = document.getElementById("attendance-list-container");
+            if (!container) return;
+            container.innerHTML = "";
+            const currentStates = getActiveAttendanceState();
+
+            const targetList = activeAttendanceRole === "members" ? window.appData.members : window.appData.leaders;
+
+            if (targetList.length === 0) {
+                container.innerHTML = `<div class="p-8 text-center text-slate-400">目前雲端名冊為空。</div>`;
+                return;
+            }
+
+            targetList.forEach((person) => {
+                let state = currentStates[person.id] || "unmarked";
+                
+                let stateBadge = `<span class="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-full font-bold">未點名</span>`;
+                if (state === "present") stateBadge = `<span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-bold">✓ 出席</span>`;
+                if (state === "excused") stateBadge = `<span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-full font-bold">⚡ 請假</span>`;
+                if (state === "absent") stateBadge = `<span class="bg-rose-100 text-rose-800 text-xs px-2.5 py-1 rounded-full font-bold">✗ 缺席</span>`;
+
+                const row = document.createElement("div");
+                row.className = "grid grid-cols-12 p-4 items-center gap-2 hover:bg-slate-50 transition";
+                row.innerHTML = `
+                    <div class="col-span-4 flex flex-col">
+                        <span class="font-bold text-slate-700">${person.name}</span>
+                        <span class="text-xs text-slate-400 font-mono">${person.id} ${activeAttendanceRole === 'leaders' ? `(${person.role.split(' ')[0]})` : ''}</span>
+                    </div>
+                    <div class="col-span-3 text-center">
+                        ${stateBadge}
+                    </div>
+                    <div class="col-span-5 flex justify-end gap-1.5">
+                        <button onclick="markSingleAttendance('${person.id}', 'present')" class="text-xs px-2.5 py-1.5 rounded-lg border border-emerald-200 text-emerald-700 hover:bg-emerald-50 transition font-bold">出席</button>
+                        <button onclick="markSingleAttendance('${person.id}', 'excused')" class="text-xs px-2.5 py-1.5 rounded-lg border border-amber-200 text-amber-700 hover:bg-amber-50 transition font-bold">請假</button>
+                        <button onclick="markSingleAttendance('${person.id}', 'absent')" class="text-xs px-2.5 py-1.5 rounded-lg border border-rose-200 text-rose-700 hover:bg-rose-50 transition font-bold">缺席</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        window.markSingleAttendance = async function(id, status) {
+            const states = getActiveAttendanceState();
+            states[id] = status;
+            
+            const dateStr = document.getElementById("attendance-date").value;
+            const themeStr = document.getElementById("attendance-theme").value.trim();
+            
+            const cleanStates = { ...states };
+            delete cleanStates.theme;
+
+            await saveAttendanceCloud(dateStr, cleanStates, themeStr);
+        }
+
+        window.saveCurrentThemeOnly = async function() {
+            const dateStr = document.getElementById("attendance-date").value;
+            const themeStr = document.getElementById("attendance-theme").value.trim();
+            const states = getActiveAttendanceState();
+            
+            const cleanStates = { ...states };
+            delete cleanStates.theme;
+
+            await saveAttendanceCloud(dateStr, cleanStates, themeStr);
+            showToast("是日主題已儲存並線上同步！");
+            updateDashboardStats();
+        }
+
+        window.setAllAttendance = async function(status) {
+            const states = getActiveAttendanceState();
+            const targetList = activeAttendanceRole === "members" ? window.appData.members : window.appData.leaders;
+            targetList.forEach(p => {
+                states[p.id] = status;
+            });
+            const dateStr = document.getElementById("attendance-date").value;
+            const themeStr = document.getElementById("attendance-theme").value.trim();
+            
+            const cleanStates = { ...states };
+            delete cleanStates.theme;
+
+            await saveAttendanceCloud(dateStr, cleanStates, themeStr);
+            showToast(`已批次設定今日全員為【${status === 'present' ? '出席' : '缺席'}】`);
+        }
+
+        window.saveAttendanceToHistory = async function() {
+            const dateStr = document.getElementById("attendance-date").value;
+            const themeStr = document.getElementById("attendance-theme").value.trim();
+            const states = getActiveAttendanceState();
+            
+            const cleanStates = { ...states };
+            delete cleanStates.theme;
+
+            await saveAttendanceCloud(dateStr, cleanStates, themeStr);
+            showToast(`${dateStr} 主題及點名結果已成功同步至雲端！`);
+            updateDashboardStats();
+        }
+
+        // TRAVEL SUBSCRIPTION FEE MODULE
+        window.renderFeeTracker = function() {
+            const container = document.getElementById("fee-list-container");
+            if (!container) return;
+
+            const year = document.getElementById("fee-year-select").value || "2026";
+            const quarter = document.getElementById("fee-quarter-select").value || "4";
+            const key = `${year}_${quarter}`;
+            
+            const currentFees = window.appData.feesHistory[key] || {};
+            let paidCount = 0;
+            container.innerHTML = "";
+
+            window.appData.members.forEach((m) => {
+                const isPaid = currentFees[m.id] === true;
+                if (isPaid) paidCount++;
+
+                const row = document.createElement("div");
+                row.className = "grid grid-cols-12 p-4 items-center hover:bg-slate-50 transition";
+                row.innerHTML = `
+                    <div class="col-span-5 flex flex-col">
+                        <span class="font-bold text-slate-700">${m.name}</span>
+                        <span class="text-xs text-slate-400 font-mono">${m.id}</span>
+                    </div>
+                    <div class="col-span-3 text-center font-bold text-slate-600">
+                        $150
+                    </div>
+                    <div class="col-span-4 text-right">
+                        <button onclick="toggleFeePaid('${m.id}', ${!isPaid})" class="px-4 py-1.5 rounded-full text-xs font-bold transition ${
+                            isPaid 
+                                ? "bg-emerald-100 text-emerald-800 border border-emerald-200" 
+                                : "bg-rose-50 text-rose-800 border border-rose-200"
+                        }">
+                            ${isPaid ? "● 已付" : "○ 未付"}
+                        </button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+
+            if (document.getElementById("fee-total-required")) {
+                document.getElementById("fee-total-required").innerText = `$${window.appData.members.length * 150}`;
+                document.getElementById("fee-collected-sum").innerText = `$${paidCount * 150}`;
+                document.getElementById("fee-collected-ratio").innerText = `${paidCount} / ${window.appData.members.length} 名`;
+            }
+        }
+
+        window.toggleFeePaid = async function(memberId, paidState) {
+            const year = document.getElementById("fee-year-select").value;
+            const quarter = document.getElementById("fee-quarter-select").value;
+            const key = `${year}_${quarter}`;
+            await saveFeeCloud(key, memberId, paidState);
+        }
+
+        window.bulkPayFees = async function(state) {
+            const year = document.getElementById("fee-year-select").value;
+            const quarter = document.getElementById("fee-quarter-select").value;
+            const key = `${year}_${quarter}`;
+            
+            const updateMap = {};
+            window.appData.members.forEach(m => {
+                updateMap[m.id] = state;
+            });
+            await saveBulkFeeCloud(key, updateMap);
+            showToast("成功雲端批次登記全員已付");
+        }
+
+        // EXPERIENCE PROGRESS MODULE
+        window.populateProgressSelector = function() {
+            const select = document.getElementById("progress-member-select");
+            if (!select) return;
+            const prevVal = select.value;
+            select.innerHTML = "";
+            window.appData.members.forEach(m => {
+                const opt = document.createElement("option");
+                opt.value = m.id;
+                opt.innerText = `${m.name} (${m.id})`;
+                select.appendChild(opt);
+            });
+            if (prevVal) select.value = prevVal;
+        }
+
+        function calculateMemberOverallPercent(member) {
+            let totalBoxes = 0;
+            let checkedBoxes = 0;
+            window.progressSchema.forEach(cat => {
+                const completed = member.progress?.[cat.id] || {};
+                cat.items.forEach((_, idx) => {
+                    totalBoxes++;
+                    if (completed[idx] === true) checkedBoxes++;
+                });
+            });
+            return totalBoxes === 0 ? 0 : Math.round((checkedBoxes / totalBoxes) * 100);
+        }
+
+        window.loadMemberProgress = function() {
+            const memberId = document.getElementById("progress-member-select").value;
+            const member = window.appData.members.find(m => m.id === memberId);
+            if (!member) return;
+
+            const percentage = calculateMemberOverallPercent(member);
+            document.getElementById("member-total-progressbar").style.width = `${percentage}%`;
+            document.getElementById("member-total-progress-percent").innerText = `${percentage}%`;
+
+            const container = document.getElementById("progress-categories-container");
+            container.innerHTML = "";
+
+            window.progressSchema.forEach((cat) => {
+                const completed = member.progress?.[cat.id] || {};
+
+                let catTotal = cat.items.length;
+                let catChecked = 0;
+                cat.items.forEach((_, idx) => {
+                    if (completed[idx] === true) catChecked++;
+                });
+                const catPercent = Math.round((catChecked / catTotal) * 100);
+
+                const card = document.createElement("div");
+                card.className = "bg-slate-50 p-5 rounded-2xl border border-slate-150 space-y-3";
+                
+                let checkListHtml = "";
+                cat.items.forEach((item, itemIdx) => {
+                    const isChecked = completed[itemIdx] === true;
+                    checkListHtml += `
+                        <label class="flex items-start gap-2.5 p-2 rounded hover:bg-slate-100 cursor-pointer transition text-xs">
+                            <input type="checkbox" onchange="updateLocalProgressState('${memberId}', '${cat.id}', ${itemIdx}, this.checked)" ${isChecked ? 'checked' : ''} class="mt-0.5 w-4 h-4 text-scout-green border-slate-300 rounded focus:ring-scout-green">
+                            <span class="text-slate-700 leading-normal font-medium">${item}</span>
+                        </label>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <h4 class="font-bold text-scout-dark text-sm">${cat.title}</h4>
+                        <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">${catPercent}%</span>
+                    </div>
+                    <div class="space-y-1">
+                        ${checkListHtml}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        window.updateLocalProgressState = function(memberId, catId, itemIdx, checked) {
+            const member = window.appData.members.find(m => m.id === memberId);
+            if (!member) return;
+            if (!member.progress) member.progress = {};
+            if (!member.progress[catId]) member.progress[catId] = {};
+            
+            member.progress[catId][itemIdx] = checked;
+            
+            const percentage = calculateMemberOverallPercent(member);
+            document.getElementById("member-total-progressbar").style.width = `${percentage}%`;
+            document.getElementById("member-total-progress-percent").innerText = `${percentage}%`;
+        }
+
+        window.saveMemberProgress = async function() {
+            const memberId = document.getElementById("progress-member-select").value;
+            const member = window.appData.members.find(m => m.id === memberId);
+            if (!member) return;
+
+            await saveMemberProgressCloud(memberId, member.progress);
+            showToast(`小童軍 ${member.name} 的學習進度已同步保存至雲端！`);
+        }
+
+        // AWARD & RECORD LOGGING MODULE
+        window.populateCertSelector = function() {
+            const select = document.getElementById("cert-member-select");
+            if (!select) return;
+            const prevVal = select.value;
+            select.innerHTML = "";
+            window.appData.members.forEach(m => {
+                const opt = document.createElement("option");
+                opt.value = m.id;
+                opt.innerText = `${m.name} (${m.id})`;
+                select.appendChild(opt);
+            });
+            if (prevVal) select.value = prevVal;
+        }
+
+        window.renderAwardsRecords = function() {
+            const container = document.getElementById("awards-list-container");
+            if (!container) return;
+            container.innerHTML = "";
+            
+            if (window.appData.awardsRecord.length === 0) {
+                container.innerHTML = `<div class="p-8 text-center text-slate-400">目前雲端無任何獎勵紀錄。</div>`;
+                return;
+            }
+            
+            const sortedRecords = [...window.appData.awardsRecord].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            sortedRecords.forEach(rec => {
+                const row = document.createElement("div");
+                row.className = "grid grid-cols-12 p-4 items-center hover:bg-slate-50 transition text-sm";
+                row.innerHTML = `
+                    <div class="col-span-3 text-slate-500 font-mono font-medium">${rec.date}</div>
+                    <div class="col-span-4 flex flex-col">
+                        <span class="font-bold text-slate-800">${rec.name}</span>
+                        <span class="text-xs text-slate-400 font-mono">${rec.memberId}</span>
+                    </div>
+                    <div class="col-span-4">
+                        <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold ${
+                            rec.item.includes('🏆') 
+                            ? 'bg-amber-100 text-amber-800 border border-amber-200 font-bold' 
+                            : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                        }">
+                            ${rec.item}
+                        </span>
+                    </div>
+                    <div class="col-span-1 text-right">
+                        <button onclick="deleteAwardRecord('${rec.id}')" class="text-rose-600 hover:text-rose-900 font-bold text-xs">刪除</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        window.handleAddAward = async function(event) {
+            event.preventDefault();
+            const memberId = document.getElementById("cert-member-select").value;
+            const item = document.getElementById("cert-type-select").value;
+            const date = document.getElementById("cert-date").value;
+            
+            const member = window.appData.members.find(m => m.id === memberId);
+            if (!member) return;
+            
+            const newRecord = {
+                id: "AWRD-" + Date.now(),
+                memberId: member.id,
+                name: member.name,
+                item: item,
+                date: date
+            };
+            
+            await addAwardCloud(newRecord);
+            showToast(`成功登錄並發布 ${member.name} 的獎章獲取紀錄！`);
+        }
+
+        window.deleteAwardRecord = function(id) {
+            showConfirmModal("確定要自雲端刪除這筆獲獎紀錄嗎？此操作將在所有領袖畫面上同步生效。", async () => {
+                await deleteAwardCloud(id);
+                showToast("已成功雲端刪除獎勵記錄");
+            });
+        }
+
+        // AI ASSISTANT MODULE (Non-Streaming)
+        window.generateAIGuide = async function() {
+            const theme = document.getElementById("ai-theme-input").value.trim();
+            const notes = document.getElementById("ai-notes-input").value.trim();
+
+            if (!theme) {
+                showToast("請輸入集會主題，例如『戶外自然探索』", "error");
+                return;
+            }
+
+            const container = document.getElementById("ai-response-container");
+            const loader = document.getElementById("ai-loader");
+            const contentBox = document.getElementById("ai-content-box");
+            const btn = document.getElementById("btn-generate-ai");
+
+            container.classList.remove("hidden");
+            loader.classList.remove("hidden");
+            contentBox.innerText = "";
+            btn.disabled = true;
+
+            const apiKey = ""; // Safe blank runtime container configuration
+
+            const systemPrompt = `你是一位資深的香港童軍總會小童軍支部團領袖(GSL)，精通 4 至 7 歲幼童的生理特徵與最新小童軍活動指引（核心目標：「認識自己，快樂同行」）。
+目前本團集會時間為 1小時15分鐘（7:15 PM - 8:30 PM），請為我們制定一份完美的集會企劃案與領袖操作手冊。
+此階段小童軍注意力一般只有10-15分鐘，必須採用體驗式學習、遊戲為本，避免講授。
+
+請嚴格按照以下架構回傳繁體中文指引：
+1. 集會概述 (包含：集會主題、教育目標、所需物資)
+2. 7:15 PM - 7:25 PM 開會儀式 (幼樹圈/Grasshopper Ring、宣誓、規律)
+3. 7:25 PM - 7:40 PM 動態小遊戲 (需切合主題、釋放能量，並有安全提醒)
+4. 7:40 PM - 8:05 PM 主題體驗活動 (動手做/探索/說故事，講求趣味性)
+5. 8:05 PM - 8:20 PM 靜態小遊戲 / 反思 (收心、冷靜、簡短分享)
+6. 8:20 PM - 8:30 PM 閉會儀式與讚賞時間 (領袖鼓勵、給貼紙/蓋印章、唱閉會歌)
+7. 領袖提示：本次主題針對小童軍發展的引導建議與安全防護措施。`;
+
+            const userQuery = `本週集會主題是：「${theme}」${notes ? `\n特別備註：${notes}` : ''}`;
+
+            let retries = 0;
+            const maxRetries = 5;
+            let success = false;
+
+            while (retries < maxRetries && !success) {
+                try {
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: userQuery }] }],
+                            systemInstruction: { parts: [{ text: systemPrompt }] }
+                        })
+                    });
+
+                    if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+
+                    const resData = await response.json();
+                    const text = resData.candidates?.[0]?.content?.parts?.[0]?.text;
+                    
+                    if (text) {
+                        contentBox.innerText = text;
+                        success = true;
+                    } else {
+                        throw new Error("No payload content.");
+                    }
+                } catch (err) {
+                    retries++;
+                    const delay = Math.pow(2, retries) * 1000;
+                    await new Promise(res => setTimeout(res, delay));
+                    if (retries >= maxRetries) {
+                        contentBox.innerHTML = `<span class="text-rose-600 font-bold">抱歉，AI 暫時無法連線。錯誤詳情：${err.message}。請確認您的網絡狀況，或稍後再試。</span>`;
+                    }
+                }
+            }
+
+            loader.classList.add("hidden");
+            btn.disabled = false;
+        }
+
+        window.copyAIGuideToClipboard = function() {
+            const contentBox = document.getElementById("ai-content-box");
+            if (!contentBox.innerText) return;
+            
+            const textarea = document.createElement("textarea");
+            textarea.value = contentBox.innerText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast("集會指引已成功複製！");
+            } catch (err) {
+                showToast("複製失敗，請手動複製", "error");
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // EXPORT DATA
+        window.exportData = function() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(window.appData));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `grasshopper_scout_cloud_data_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showToast("全團務數據備份導出成功！");
+        }
+    </script>
+</body>
+</html>
+
+```
