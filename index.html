@@ -514,14 +514,14 @@
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, updateDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const firebaseConfig =  {
-  apiKey: "AIzaSyA6BHEL8by-qEoa_5gxeuPlvcNXzQWnI_s",
-  authDomain: "scout-1787gs.firebaseapp.com",
-  projectId: "scout-1787gs",
-  storageBucket: "scout-1787gs.firebasestorage.app",
-  messagingSenderId: "251998971887",
-  appId: "1:251998971887:web:183f8a2184130acced781a"
-};
+        const firebaseConfig = {
+          apiKey: "AIzaSyA6BHEL8by-qEoa5gxeuPlvcNXzQWnIs",
+          authDomain: "scout-1787gs.firebaseapp.com",
+          projectId: "scout-1787gs",
+          storageBucket: "scout-1787gs.firebasestorage.app",
+          messagingSenderId: "251998971887",
+          appId: "1:251998971887:web:183f8a2184130acced781a"
+        };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
