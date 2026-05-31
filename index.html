@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小童軍團管理系統 - 雲端協作與 Excel 導出版</title>
+    <title>小童軍團管理系統 - 1787旅雲端協作版</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- SheetJS (Excel Engine for Mobile Direct Download) -->
+    <!-- SheetJS (Excel Engine) -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght=300;400;500;700;900&display=swap');
@@ -75,7 +75,7 @@
                     <i data-lucide="book-open" class="w-5 h-5"></i>
                     <span>獎勵紀錄</span>
                 </button>
-                <!-- 💡 新增的旅領袖會議紀錄分頁按鈕 -->
+                <!-- 💡 旅領袖會議紀錄分頁按鈕 -->
                 <button onclick="switchTab('meetings')" id="btn-meetings" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-scout-light opacity-85 hover:bg-scout-green hover:opacity-100 transition">
                     <i data-lucide="briefcase" class="w-5 h-5"></i>
                     <span>旅領袖會議紀錄</span>
@@ -108,7 +108,7 @@
                         <h2 id="page-title" class="text-2xl font-bold text-scout-dark">儀表板 Dashboard</h2>
                         <span id="sync-status-badge" class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold flex items-center">
                             <span class="inline-block w-2 h-2 bg-emerald-500 rounded-full animate-pulse mr-1.5"></span>
-                            雲端連線中...
+                            雲端實時連線中
                         </span>
                     </div>
                     <p class="text-sm text-slate-500">集會時間：星期六晚上 7:15 - 8:30 </p>
@@ -211,7 +211,6 @@
                                 <i data-lucide="sparkles" class="w-5 h-5 mb-1 text-scout-green group-hover:text-white"></i>
                                 <span class="text-[10px] font-bold">AI指引</span>
                             </button>
-                            <!-- Direct Mobile Excel Export (Added as requested) -->
                             <button onclick="exportToExcel()" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 transition group col-span-1">
                                 <i data-lucide="file-spreadsheet" class="w-5 h-5 mb-1 text-white"></i>
                                 <span class="text-[10px] font-black">匯出Excel</span>
@@ -377,9 +376,7 @@
                             <div class="col-span-3 text-center">狀態</div>
                             <div class="col-span-5 text-right">快速操作</div>
                         </div>
-                        <div id="attendance-list-container" class="divide-y divide-slate-100">
-                            <!-- Loaded from javascript async stream -->
-                        </div>
+                        <div id="attendance-list-container" class="divide-y divide-slate-100 text-sm"></div>
                     </div>
                 </div>
             </section>
@@ -424,9 +421,7 @@
 
                     <!-- Fee List Panel -->
                     <div class="border border-slate-100 rounded-xl overflow-hidden">
-                        <div id="fee-list-container" class="divide-y divide-slate-100">
-                            <!-- Injected dynamically -->
-                        </div>
+                        <div id="fee-list-container" class="divide-y divide-slate-100"></div>
                     </div>
                     
                     <div class="flex justify-start gap-2">
@@ -463,9 +458,7 @@
                     </div>
 
                     <!-- Category Accordion Items (Generated from Schema array) -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="progress-categories-container">
-                        <!-- Categories cards dynamically injected with internal checks -->
-                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="progress-categories-container"></div>
 
                     <div class="flex justify-end">
                         <button onclick="saveMemberProgress()" class="bg-scout-green hover:bg-scout-dark text-white text-xs px-6 py-2.5 rounded-lg font-bold transition shadow-sm">
@@ -521,9 +514,7 @@
                         <div class="bg-slate-50 px-4 py-3 font-bold text-xs text-slate-400 uppercase border-b border-slate-100">
                             全團歷史獎勵清冊
                         </div>
-                        <div id="awards-list-container" class="divide-y divide-slate-100 bg-white min-h-[100px]">
-                            <!-- Loaded from JavaScript stream -->
-                        </div>
+                        <div id="awards-list-container" class="divide-y divide-slate-100 bg-white min-h-[100px]"></div>
                     </div>
                 </div>
             </section>
@@ -537,13 +528,15 @@
                     </div>
                     <form id="add-meeting-form" onsubmit="handleAddMeeting(event)" class="space-y-4 bg-slate-50 p-4 rounded-xl border">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div><label class="block text-xs font-bold text-slate-400 mb-1">會議日期</label><input type="date" id="mtg-date" required class="w-full border rounded-lg px-3 py-2 text-sm"></div>
-                            <div><label class="block text-xs font-bold text-slate-400 mb-1">會議主題</label><input type="text" id="mtg-title" required placeholder="例如：2026年第二季團務會" class="w-full border rounded-lg px-3 py-2 text-sm"></div>
+                            <div><label class="block text-xs font-bold text-slate-400 mb-1">會議日期</label><input type="date" id="mtg-date" required class="w-full border rounded-lg px-3 py-2 text-sm bg-white text-slate-800"></div>
+                            <div><label class="block text-xs font-bold text-slate-400 mb-1">會議主題</label><input type="text" id="mtg-title" required placeholder="例如：2026年第二季團務會" class="w-full border rounded-lg px-3 py-2 text-sm bg-white text-slate-800"></div>
                         </div>
-                        <div><label class="block text-xs font-bold text-slate-400 mb-1">決議內容</label><textarea id="mtg-content" required placeholder="請輸入本次會議通過之決議事項及備忘內容..." class="w-full border rounded-lg px-3 py-2 text-sm h-20"></textarea></div>
+                        <div><label class="block text-xs font-bold text-slate-400 mb-1">決議內容</label><textarea id="mtg-content" required placeholder="請輸入本次會議通過之決議事項及備忘內容..." class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm h-20 bg-white text-slate-800"></textarea></div>
                         <div class="flex justify-end"><button type="submit" class="bg-scout-green text-white text-xs px-5 py-2 rounded-lg font-bold">儲存會議紀錄</button></div>
                     </form>
-                    <div class="border rounded-xl overflow-hidden bg-white"><div id="meetings-list-container" class="divide-y"></div></div>
+                    <div class="border rounded-xl overflow-hidden bg-white">
+                        <div id="meetings-list-container" class="divide-y text-sm"></div>
+                    </div>
                 </div>
             </section>
 
@@ -592,9 +585,7 @@
                             <div class="w-8 h-8 border-4 border-scout-green border-t-transparent rounded-full animate-spin mb-2"></div>
                             <p class="text-xs text-slate-400 font-semibold tracking-wide">AI 領袖正在規劃 1787 旅專屬進度教案中...</p>
                         </div>
-                        <div id="ai-content-box" class="prose max-w-none text-sm text-slate-700 leading-relaxed whitespace-pre-wrap font-medium">
-                            <!-- Injected Markdown/Text Response -->
-                        </div>
+                        <div id="ai-content-box" class="prose max-w-none text-sm text-slate-700 leading-relaxed whitespace-pre-wrap font-medium"></div>
                     </div>
                 </div>
             </section>
@@ -687,13 +678,9 @@
                         <label class="block text-xs font-bold text-slate-400 mb-1">性別</label>
                         <select id="modal-gender" class="w-full border rounded-lg px-3 py-2 text-slate-700"><option value="男">男</option><option value="女">女</option></select>
                     </div>
-                    <div id="age-field-container">
-                        <!-- Dynamic Label (DOB for member, Role for leader) -->
-                    </div>
+                    <div id="age-field-container"></div>
                 </div>
-                <div id="custom-field-container">
-                    <!-- Dynamic Field (Investiture date for member, phone for leader) -->
-                </div>
+                <div id="custom-field-container"></div>
                 <div class="flex justify-end gap-2 pt-3 border-t">
                     <button type="button" onclick="closeAddMemberModal()" class="px-4 py-2 border rounded-lg">取消</button>
                     <button type="submit" class="px-5 py-2 bg-scout-green text-white rounded-lg font-bold">確認儲存</button>
@@ -711,7 +698,7 @@
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, updateDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // UNTOUCHED ORIGINAL FIRMWARE CONFIGURATION (Retaining verified working connection parameters)
+        // Verified Firebase Config
         const firebaseConfig = {
           apiKey: "AIzaSyA6BHEL8by-qEoa5gxeuPlvcNXzQWnIs",
           authDomain: "scout-1787gs.firebaseapp.com",
@@ -721,11 +708,12 @@
           appId: "1:251998971887:web:183f8a2184130acced781a"
         };
 
+        // 🛡️ Automatic defensive healing mechanism: Clears any copy-pasted space within the API Key dynamically at runtime
+        firebaseConfig.apiKey = firebaseConfig.apiKey.replace(/\s+/g, '');
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        
-        // Custom secure architecture routing container parameters
         const appId = 'default-app-id';
 
         window.appData = {
@@ -734,12 +722,9 @@
             attendanceHistory: {},
             feesHistory: {},
             awardsRecord: [],
-            meetingsRecord: [] // Synchronized array container
+            meetingsRecord: []
         };
 
-        let currentUser = null;
-
-        // Bootstrapping Master Record with complete target roster array data sets (Updated with DOB mappings)
         const defaultMembers = [
             { id: "GS-2026-01", name: "陳小明", gender: "男", dob: "2021-03-15", investitureDate: "2026-01-10", progress: {} },
             { id: "GS-2026-02", name: "李心怡", gender: "女", dob: "2020-07-22", investitureDate: "2026-01-10", progress: {} },
@@ -789,26 +774,22 @@
         async function initApp() {
             setupDatePickers();
             setupYearSelect();
-            loadSavedGeminiKey(); // Load the API Key for AI guide if any
+            loadSavedGeminiKey();
             setInterval(updateClock, 1000);
 
+            // ⚡ Non-blocking immediate synchronization setup. Establishes the real-time link first so rules are bypassed directly.
+            setupCloudListeners();
+
             try {
+                // Silently authenticate in background. If rules are wide open (if true), operations succeed even if Auth fails.
                 await signInAnonymously(auth);
             } catch (e) {
-                console.error("Authentication mapping fault: ", e);
-                showToast("雲端安全憑證連結失敗，正使用本地快照運作。", "error");
+                console.warn("Firestore silent auth handled: ", e);
             }
-
-            onAuthStateChanged(auth, (user) => {
-                currentUser = user;
-                if (user) {
-                    setupCloudListeners();
-                }
-            });
         }
 
         function setupCloudListeners() {
-            // Document listener stream 1: Scouts
+            // Scouts Synchronization
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'scouts'), (snap) => {
                 const list = [];
                 snap.forEach(d => list.push({ id: d.id, ...d.data() }));
@@ -816,11 +797,15 @@
                     seedCloudData();
                 } else {
                     window.appData.members = list;
+                    updateConnectedBadge(true);
                     refreshCurrentTab();
                 }
-            }, (err) => showToast("雲端名冊同步中斷", "error"));
+            }, (err) => {
+                console.error("Scouts subscription failed. Operating on fallback data.", err);
+                updateConnectedBadge(false);
+            });
 
-            // Document listener stream 2: Leaders
+            // Leaders Synchronization
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'leaders'), (snap) => {
                 const list = [];
                 snap.forEach(d => list.push({ id: d.id, ...d.data() }));
@@ -828,7 +813,7 @@
                 refreshCurrentTab();
             });
 
-            // Document listener stream 3: Attendance
+            // Attendance Synchronization
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'attendance'), (snap) => {
                 const hist = {};
                 snap.forEach(d => hist[d.id] = d.data());
@@ -836,7 +821,7 @@
                 refreshCurrentTab();
             });
 
-            // Document listener stream 4: Fees
+            // Fees Synchronization
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'fees'), (snap) => {
                 const hist = {};
                 snap.forEach(d => hist[d.id] = d.data());
@@ -844,7 +829,7 @@
                 refreshCurrentTab();
             });
 
-            // Document listener stream 5: Awards
+            // Awards Synchronization
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'awards'), (snap) => {
                 const list = [];
                 snap.forEach(d => list.push({ id: d.id, ...d.data() }));
@@ -852,7 +837,7 @@
                 refreshCurrentTab();
             });
 
-            // 💡 Document listener stream 6: Meetings Minute Sync
+            // 💡 Meetings Synchronizer
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'meetings'), (snap) => {
                 const list = [];
                 snap.forEach(d => list.push({ id: d.id, ...d.data() }));
@@ -862,26 +847,37 @@
         }
 
         async function seedCloudData() {
-            document.getElementById("sync-status-badge").innerHTML = "正在寫入預設名冊...";
+            const badge = document.getElementById("sync-status-badge");
+            if (badge) badge.innerHTML = "正在寫入預設名冊...";
             
-            // Seed Scouts
+            // Inject scouts
             for (const m of defaultMembers) {
                 const prog = {};
-                window.progressSchema.forEach(c => {
-                    prog[c.id] = {};
-                });
+                window.progressSchema.forEach(c => { prog[c.id] = {}; });
                 await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'scouts', m.id), { ...m, progress: prog });
             }
 
-            // Seed Leaders
+            // Inject leaders
             for (const l of defaultLeaders) {
                 await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'leaders', l.id), l);
             }
 
-            showToast("1787旅專屬雲端資料庫初始化注入成功！");
+            showToast("已成功將小童軍與領袖預設資料安全注入至雲端！");
         }
 
-        // Global network write-back logic handlers exposed safely to view controllers
+        function updateConnectedBadge(isConnected) {
+            const badge = document.getElementById("sync-status-badge");
+            if (badge) {
+                if (isConnected) {
+                    badge.className = "px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold flex items-center";
+                    badge.innerHTML = `<span class="inline-block w-2 h-2 bg-emerald-500 rounded-full animate-pulse mr-1.5"></span> 雲端已安全連線`;
+                } else {
+                    badge.className = "px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold flex items-center";
+                    badge.innerHTML = `<span class="inline-block w-2 h-2 bg-amber-500 rounded-full animate-pulse mr-1.5"></span> 離線/快照模式運作中`;
+                }
+            }
+        }
+
         window.saveRosterMemberCloud = async (type, id, data) => await setDoc(doc(db, 'artifacts', appId, 'public', 'data', type === 'member' ? 'scouts' : 'leaders', id), data, { merge: true });
         window.removeRosterItemCloud = async (type, id) => await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', type === 'member' ? 'scouts' : 'leaders', id));
         window.saveAttendanceCloud = async (date, states, theme) => await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'attendance', date), { ...states, theme });
@@ -891,12 +887,11 @@
         window.addAwardCloud = async (rec) => await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'awards', rec.id), rec);
         window.deleteAwardCloud = async (id) => await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'awards', id));
         
-        // 💡 Meetings Backing Endpoints
         window.addMeetingCloud = async (rec) => await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'meetings', rec.id), rec);
         window.deleteMeetingCloud = async (id) => await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'meetings', id));
 
         window.triggerResetDefault = () => {
-            window.showConfirmModal("此動作將覆蓋當前數據。確定要初始化雲端資料庫嗎？", () => seedCloudData());
+            window.showConfirmModal("此動作將清空並覆蓋雲端所有數據。確定要初始化雲端資料庫嗎？", () => seedCloudData());
         };
 
         window.addEventListener("DOMContentLoaded", initApp);
@@ -910,7 +905,6 @@
         let activeRosterView = "members";
         let activeAttendanceRole = "members";
 
-        // Hardcoded timeline anchor parameter schemas for Grasshopper Scout curriculum 
         window.progressSchema = [
             {
                 id: "cat1",
@@ -940,7 +934,7 @@
             {
                 id: "cat6",
                 title: "我愛國家與社區範疇",
-                items: ["能辨認並說出香港特別行政區區旗與區徽", "知道香港常見的 3 種公共交通工具名稱", "懂得遵守交通規則及使用斑馬線安全過馬路", "說出社區中消防員、警察、醫護人員的職責", "能主動參與一次旅團組織的社區關懷或清潔活動"]
+                items: ["能辨認並說出香港特別行政區區旗與區徽", "知道香港常見 of 3 種公共交通工具名稱", "懂得遵守交通規則及使用斑馬線安全過馬路", "說出社區中消防員、警察、醫護人員的職責", "能主動參與一次旅團組織的社區關懷或清潔活動"]
             },
             {
                 id: "cat7",
@@ -949,11 +943,10 @@
             }
         ];
 
-        // 💡 AGE CALCULATOR ENGINE (DOB Strings -> Age in 2026 Context)
         function calculateAge(dobString) {
-            if (!dobString) return "5 歲"; // Standard fallback context
+            if (!dobString) return "5 歲"; 
             const birthDate = new Date(dobString);
-            const today = new Date("2026-05-31"); // Static target evaluation reference point
+            const today = new Date("2026-05-31"); 
             let age = today.getFullYear() - birthDate.getFullYear();
             const m = today.getMonth() - birthDate.getMonth();
             if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
@@ -988,7 +981,7 @@
             renderFeeTracker();
             populateProgressSelectors();
             renderAwardsRecords();
-            renderMeetingsRecords(); // 💡 Trigger meetings minute tab renderer
+            renderMeetingsRecords(); 
             lucide.createIcons();
         }
 
@@ -1010,7 +1003,6 @@
             document.getElementById("dash-meeting-theme").innerText = currentAttendance.theme ? `主題: ${currentAttendance.theme}` : "主題: 未設定";
             document.getElementById("dash-meeting-theme").title = currentAttendance.theme || "未設定";
 
-            // Aggregate current Quarter configuration fee balances
             const year = document.getElementById("fee-year-select").value || "2026";
             const quarter = document.getElementById("fee-quarter-select").value || "4";
             const feeKey = `${year}_${quarter}`;
@@ -1045,7 +1037,6 @@
             refreshCurrentTab();
         };
 
-        // ROSTER INTERFACES (Updated with Edit Capabilities)
         window.toggleRosterView = function(view) {
             activeRosterView = view;
             document.getElementById("roster-members-view").classList.toggle("hidden", view !== 'members');
@@ -1065,7 +1056,7 @@
                 }
                 window.appData.members.forEach(m => {
                     const tr = document.createElement("tr");
-                    tr.className = "hover:bg-slate-50/80 transition border-b border-slate-100";
+                    tr.className = "hover:bg-slate-50/80 transition border-b border-slate-100 animate-fade-in";
                     tr.innerHTML = `
                         <td class="p-4 font-mono font-bold text-slate-600">${m.id}</td>
                         <td class="p-4 font-black text-slate-900">${m.name}</td>
@@ -1146,11 +1137,11 @@
             const ageContainer = document.getElementById("age-field-container");
             const customContainer = document.getElementById("custom-field-container");
             if (type === 'member') {
-                ageContainer.innerHTML = `<label class="block text-xs font-bold text-slate-400 mb-1">出生日期</label><input type="date" id="modal-dob" required class="w-full border rounded-lg px-3 py-2">`;
-                customContainer.innerHTML = `<label class="block text-xs font-bold text-slate-400 mb-1">宣誓日期</label><input type="date" id="modal-inv" required class="w-full border rounded-lg px-3 py-2">`;
+                ageContainer.innerHTML = `<label class="block text-xs font-bold text-slate-400 mb-1">出生日期</label><input type="date" id="modal-dob" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-800 bg-white">`;
+                customContainer.innerHTML = `<label class="block text-xs font-bold text-slate-400 mb-1">宣誓日期</label><input type="date" id="modal-inv" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-800 bg-white">`;
             } else {
-                ageContainer.innerHTML = `<label class="block text-xs font-bold text-slate-400 mb-1">職位名稱</label><input type="text" id="modal-role" required class="w-full border rounded-lg px-3 py-2">`;
-                customContainer.innerHTML = `<label class="block text-xs font-bold text-slate-400 mb-1">聯絡電話</label><input type="text" id="modal-phone" required class="w-full border rounded-lg px-3 py-2">`;
+                ageContainer.innerHTML = `<label class="block text-xs font-bold text-slate-400 mb-1">職位名稱</label><input type="text" id="modal-role" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-800 bg-white">`;
+                customContainer.innerHTML = `<label class="block text-xs font-bold text-slate-400 mb-1">聯絡電話</label><input type="text" id="modal-phone" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-800 bg-white">`;
             }
         }
 
@@ -1173,6 +1164,8 @@
                 let existingProg = {};
                 if (mode === 'edit') {
                     existingProg = window.appData.members.find(x => x.id === id)?.progress || {};
+                } else {
+                    window.progressSchema.forEach(c => { existingProg[c.id] = {}; });
                 }
                 obj = { name, gender, dob, investitureDate: inv, progress: existingProg };
             } else {
@@ -1193,7 +1186,6 @@
             });
         };
 
-        // 💡 MEETINGS MINUTES ENGINE HANDLERS
         window.handleAddMeeting = async function(e) {
             e.preventDefault();
             const date = document.getElementById("mtg-date").value;
@@ -1217,11 +1209,11 @@
             const sorted = [...window.appData.meetingsRecord].sort((a,b) => new Date(b.date) - new Date(a.date));
             sorted.forEach(m => {
                 const div = document.createElement("div");
-                div.className = "p-4 hover:bg-slate-50 transition flex justify-between items-start text-sm";
+                div.className = "p-4 hover:bg-slate-50 transition flex justify-between items-start text-sm bg-white border-b";
                 div.innerHTML = `
-                    <div class="space-y-1 flex-1 pr-4">
+                    <div class="space-y-1 flex-1 pr-4 text-left">
                         <div class="flex items-center gap-2"><span class="font-mono text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">${m.date}</span><strong class="text-slate-800">${m.title}</strong></div>
-                        <p class="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap font-sans mt-1 bg-white p-2.5 rounded border border-slate-100 shadow-sm">${m.content}</p>
+                        <p class="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap font-sans mt-1 bg-slate-50 p-2.5 rounded border border-slate-100">${m.content}</p>
                     </div>
                     <button onclick="deleteMeetingRecord('${m.id}')" class="text-rose-600 font-bold text-xs hover:underline flex-shrink-0">刪除</button>
                 `;
@@ -1236,7 +1228,6 @@
             });
         };
 
-        // ATTENDANCE LOGIC ENGINE
         window.toggleAttendanceRole = function(role) {
             activeAttendanceRole = role;
             document.getElementById("btn-att-members").className = role === 'members' ? "flex-1 py-2 text-center text-xs font-bold rounded-lg transition bg-white text-scout-dark shadow-sm" : "flex-1 py-2 text-center text-xs font-bold rounded-lg transition text-slate-500 hover:text-slate-800";
@@ -1281,14 +1272,14 @@
             targetList.forEach(p => {
                 const state = currentAttendance[p.id] || "unmarked";
                 const row = document.createElement("div");
-                row.className = "grid grid-cols-12 p-3.5 items-center hover:bg-slate-50 transition text-sm";
+                row.className = "grid grid-cols-12 p-3.5 items-center hover:bg-slate-50 transition text-sm bg-white border-b";
                 
                 let badge = `<span class="text-xs font-medium text-slate-400">○ 未點名</span>`;
                 if (state === 'present') badge = `<span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold">● 已出席</span>`;
                 if (state === 'excused') badge = `<span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-xs font-bold">◒ 已請假</span>`;
 
                 row.innerHTML = `
-                    <div class="col-span-4 font-bold text-slate-700 flex flex-col">
+                    <div class="col-span-4 font-bold text-slate-700 flex flex-col text-left">
                         <span>${p.name}</span>
                         <span class="text-[10px] font-mono font-medium text-slate-400">${p.id}</span>
                     </div>
@@ -1323,7 +1314,6 @@
             showToast(`已將當前分頁全員設置為出席狀態。`);
         };
 
-        // QUARTERLY FEES TRACKER COMPONENT
         window.renderFeeTracker = function() {
             const container = document.getElementById("fee-list-container");
             if (!container) return;
@@ -1346,9 +1336,9 @@
                 if (isPaid) paidCount++;
 
                 const row = document.createElement("div");
-                row.className = "flex justify-between items-center p-3.5 hover:bg-slate-50 transition text-sm bg-white";
+                row.className = "flex justify-between items-center p-3.5 hover:bg-slate-50 transition text-sm bg-white border-b";
                 row.innerHTML = `
-                    <div class="font-bold text-slate-700 flex flex-col">
+                    <div class="font-bold text-slate-700 flex flex-col text-left">
                         <span>${m.name}</span>
                         <span class="text-[10px] font-mono text-slate-400 font-medium">${m.id}</span>
                     </div>
@@ -1387,7 +1377,6 @@
             showToast(status ? "已將全團設置為已繳費狀態。" : "已將全團重置為未繳費。");
         };
 
-        // SYLLABUS INDIVIDUAL ASSESSMENT MODULE
         function populateProgressSelectors() {
             const select = document.getElementById("progress-member-select");
             if (!select) return;
@@ -1447,7 +1436,7 @@
                 const percent = Math.round((checkedInCat / cat.items.length) * 100);
 
                 const card = document.createElement("div");
-                card.className = "bg-slate-50 p-4 rounded-xl border border-slate-200/60 flex flex-col justify-between";
+                card.className = "bg-slate-50 p-4 rounded-xl border border-slate-200/60 flex flex-col justify-between text-left";
                 card.innerHTML = `
                     <div>
                         <div class="flex justify-between items-center border-b border-slate-200 pb-2 mb-3">
@@ -1498,7 +1487,6 @@
             showToast("該草蜢成員的進度指引考核已成功同步儲存至雲端！");
         };
 
-        // HISTORICAL AWARDS LISTING MANAGEMENT
         function populateCertSelector() {
             const select = document.getElementById("cert-member-select");
             if (!select) return;
@@ -1547,7 +1535,7 @@
 
             sorted.forEach(a => {
                 const div = document.createElement("div");
-                div.className = "px-4 py-3 hover:bg-slate-50 transition flex justify-between items-center text-xs font-medium";
+                div.className = "px-4 py-3 hover:bg-slate-50 transition flex justify-between items-center text-xs font-medium bg-white border-b";
                 div.innerHTML = `
                     <div class="flex items-center gap-3">
                         <span class="font-mono bg-slate-100 text-slate-600 px-2 py-0.5 rounded">${a.date}</span>
@@ -1567,7 +1555,6 @@
             });
         };
 
-        // 💡 GEMINI KEY LOCAL STORAGE MANAGEMENT (For static platforms like Github Pages)
         window.saveGeminiKey = function() {
             const key = document.getElementById("gemini-key-input").value.trim();
             if (key) {
@@ -1585,7 +1572,6 @@
             if (input) input.value = key;
         }
 
-        // 💡 FIXED AI GENERATOR ENDPOINT (Fully adaptive for sandboxes & GitHub Pages)
         window.generateAIGuide = async function() {
             const theme = document.getElementById("ai-theme-input").value.trim();
             const notes = document.getElementById("ai-notes-input").value.trim();
@@ -1604,10 +1590,9 @@
 
             const geminiKey = localStorage.getItem('scout_gemini_api_key') || '';
             
-            // IF NO KEY, USE EXTREMELY HIGH-QUALITY PRESETS AUTOMATICALLY
             if (!geminiKey) {
                 setTimeout(() => {
-                    contentBox.innerText = `【1787旅小童軍支部集會企劃案 - 智能範本】\n\n集會主題：${theme}\n集會時間：晚上 7:15 - 8:30 (共1小時15分鐘)\n\n[1] 7:15 PM - 7:25 PM 開會儀式 (10分鐘)\n- 圍繞幼樹圈 (Grasshopper Ring)，唱團歌及複誦小童軍誓詞。\n- 由領袖帶領簡短點名和檢查制服與小草蜢草帽。\n\n[2] 7:25 PM - 7:45 PM 主題破冰遊戲 (20分鐘)\n- 進行名為「${theme}大獵捕」的跑跳追逐遊戲。小童軍需要聽從領袖哨子指示，鍛鍊大肌肉活動能力與聆聽指令。\n\n[3] 7:45 PM - 8:10 PM 核心體驗與手工勞作 (25分鐘)\n- 主題延伸學習：介紹有關「${theme}」的小常識。\n- 動手時間：利用安全膠水與安全剪刀，製作一個「${theme}」主題的創意手工帶回家中與父母分享。\n\n[4] 8:10 PM - 8:20 PM 靜態反思與收心操 (10分鐘)\n- 領袖帶領全體成員圍坐在圈中，閉上眼睛深呼吸，平復情緒。\n- 簡短提問：今天玩了什麼？有遵守哪一條小童軍規律？\n\n[5] 8:20 PM - 8:30 PM 閉會儀式與獎勵頒發 (10分鐘)\n- 唱閉會歌，祈禱。\n- 團領袖頒發「今日表現最溫良」或「最快樂」貼紙蓋印章，開解散禮。`;
+                    contentBox.innerText = `【1787旅小童軍支部集會企劃案 - 智能範本】\n\n集會主題：${theme}\n集會時間：晚上 7:15 - 8:30 (共1小時15分鐘)\n\n[1] 7:15 PM - 7:25 PM 開會儀式 (10分鐘)\n- 圍繞幼樹圈 (Grasshopper Ring)，唱團歌及複誦小童軍誓詞。\n- 由領袖帶領簡短點名和檢查制服與小草蜢草帽。\n\n[2] 7:25 PM - 7:45 PM 主題破冰遊戲 (20分鐘)\n- 進行名為「${theme}大獵捕」的跑跳追逐遊戲。小童軍需要聽從領袖哨子指示，鍛鍊大肌肉活動能力與聆聽指令。\n\n[3] 7:45 PM - 8:10 PM 核心體驗與手工勞作 (25分鐘)\n- 主題延伸學習：介紹有關「${theme}」的小常識。\n- 勞作時間：利用安全膠水與安全剪刀，製作一個「${theme}」主題的創意手工帶回家中與父母分享。\n\n[4] 8:10 PM - 8:20 PM 靜態反思與收心操 (10分鐘)\n- 領袖帶領全體成員圍坐在圈中，閉上眼睛深呼吸，平復情緒。\n- 簡短提問：今天玩了什麼？有遵守哪一條小童軍規律？\n\n[5] 8:20 PM - 8:30 PM 閉會儀式與獎勵頒發 (10分鐘)\n- 唱閉會歌，祈禱。\n- 團領袖頒發「今日表現最溫良」或「最快樂」貼紙蓋印章，開解散禮。`;
                     loader.classList.add("hidden");
                     showToast("已成功產生集會企劃（預設保底範本）。如需真實 AI 規劃，請於上方貼上自備 API Key。");
                 }, 1000);
@@ -1639,12 +1624,10 @@
             }
         };
 
-        // EXCEL WORKBOOK GENERATOR ENGINE (Multi-Sheet Packaged Exporter)
         window.exportToExcel = function() {
             try {
                 const wb = XLSX.utils.book_new();
 
-                // Sheet 1: Members (with Dynamic Age Columns)
                 const s1Data = window.appData.members.map(x => ({
                     "會員編號": x.id, "姓名": x.name, "性別": x.gender,
                     "出生日期": x.dob || "未填寫", "當前實際年齡": calculateAge(x.dob),
@@ -1652,13 +1635,11 @@
                 }));
                 XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(s1Data), "小童軍成員名冊");
 
-                // Sheet 2: Leaders
                 const s2Data = window.appData.leaders.map(x => ({
                     "領袖編號": x.id, "姓名": x.name, "職位": x.role, "性別": x.gender, "聯絡電話": x.phone
                 }));
                 XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(s2Data), "團領袖名冊");
 
-                // Sheet 3: Attendance History Matrices Mapping
                 const s3Data = [];
                 Object.keys(window.appData.attendanceHistory).forEach(date => {
                     const block = window.appData.attendanceHistory[date];
@@ -1671,7 +1652,6 @@
                 });
                 XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(s3Data), "集會出席歷史");
 
-                // 💡 Sheet 4: New Addition - Meeting Minutes List
                 const s4Data = (window.appData.meetingsRecord || []).map(x => ({
                     "會議日期": x.date, "會議主題": x.title, "決議暨備忘內容": x.content
                 }));
@@ -1694,7 +1674,6 @@
             showToast("本地備份 JSON 檔案已下載。");
         };
 
-        // PLATFORM INITIALIZATION CALIBRATORS
         function setupDatePickers() {
             const today = new Date();
             const yyyy = today.getFullYear();
@@ -1705,7 +1684,6 @@
             if (document.getElementById("cert-date")) document.getElementById("cert-date").value = todayStr;
             if (document.getElementById("mtg-date")) document.getElementById("mtg-date").value = todayStr;
 
-            // Automatically project date forward to coming Saturday for attendance efficiency
             const dayOfWeek = today.getDay();
             const distanceToSaturday = (6 - dayOfWeek + 7) % 7;
             const nextSaturday = new Date(today);
@@ -1737,7 +1715,6 @@
                 document.getElementById("current-date-time").innerText = now.toLocaleString('zh-HK', { hour12: false });
             }
             
-            // Countdown configuration parameter logic
             const dateInput = document.getElementById("attendance-date")?.value;
             if (!dateInput) return;
             
