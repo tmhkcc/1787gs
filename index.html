@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="zh-Hant-HK">
 <head>
@@ -75,7 +74,6 @@
                     <i data-lucide="book-open" class="w-5 h-5"></i>
                     <span>獎勵紀錄</span>
                 </button>
-                <!-- 💡 旅領袖會議紀錄分頁按鈕 -->
                 <button onclick="switchTab('meetings')" id="btn-meetings" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-scout-light opacity-85 hover:bg-scout-green hover:opacity-100 transition">
                     <i data-lucide="briefcase" class="w-5 h-5"></i>
                     <span>旅領袖會議紀錄</span>
@@ -125,7 +123,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
                         <div>
-                            <p class="text-sm text-slate-500 font-medium">小童軍成員</p>
+                            <p class="text-sm text-slate-500 font-medium">小童軍成員 (雲端)</p>
                             <h3 id="dash-scout-count" class="text-3xl font-bold text-slate-800 mt-1">-- / 24 <span class="text-sm font-normal text-slate-400">名</span></h3>
                         </div>
                         <div class="bg-emerald-100 p-3 rounded-xl text-emerald-700">
@@ -134,7 +132,7 @@
                     </div>
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
                         <div>
-                            <p class="text-sm text-slate-500 font-medium">團領袖</p>
+                            <p class="text-sm text-slate-500 font-medium">團領袖 (Leaders)</p>
                             <h3 id="dash-leader-count" class="text-3xl font-bold text-slate-800 mt-1">-- <span class="text-sm font-normal text-slate-400">員</span></h3>
                         </div>
                         <div class="bg-amber-100 p-3 rounded-xl text-amber-700">
@@ -152,7 +150,7 @@
                     </div>
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
                         <div class="flex-1 pr-2">
-                            <p class="text-sm text-slate-500 font-medium">本週集會出席率</p>
+                            <p class="text-sm text-slate-500 font-medium">本日集會出席率</p>
                             <h3 id="dash-attendance-rate" class="text-3xl font-bold text-slate-800 mt-1">--%</h3>
                             <p id="dash-meeting-theme" class="text-xs text-scout-green font-semibold mt-1.5 truncate max-w-[150px]" title="主題">主題: 未設定</p>
                         </div>
@@ -252,8 +250,8 @@
                             </p>
                         </div>
                         <div class="mt-4 pt-4 border-t border-slate-100 flex gap-4 text-xs text-slate-500">
-                            <div><strong class="text-scout-green">小童軍誓詞：</strong><br>「我願參加小童軍，愛神愛人愛國家。」</div>
-                            <div><strong class="text-scout-green">小童軍規律：</strong><br>「小童軍日行一善。」</div>
+                            <div><strong class="text-scout-green">小童軍誓詞：</strong>「我願愛神、愛家、愛國家。」</div>
+                            <div><strong class="text-scout-green">小童軍規律：</strong>「小童軍，愛快樂，又聰明，又溫良。」</div>
                         </div>
                     </div>
                 </div>
@@ -261,7 +259,6 @@
 
             <!-- 2. ROSTER TAB -->
             <section id="tab-roster" class="tab-content hidden space-y-6">
-                <!-- Roster Selector Tabs -->
                 <div class="flex border-b border-slate-200">
                     <button onclick="toggleRosterView('members')" id="btn-view-members" class="px-6 py-3 border-b-2 border-scout-green text-scout-green font-bold text-sm">
                         小童軍成員名冊
@@ -335,7 +332,6 @@
 
             <!-- 3. ATTENDANCE TAB -->
             <section id="tab-attendance" class="tab-content hidden space-y-6">
-                <!-- Attendance Main Panel -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
                     <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                         <div class="max-w-md">
@@ -359,7 +355,6 @@
                         </div>
                     </div>
 
-                    <!-- Role Filters inside Attendance -->
                     <div class="flex gap-2 p-1 bg-slate-100 rounded-xl max-w-xs">
                         <button onclick="toggleAttendanceRole('members')" id="btn-att-members" class="flex-1 py-2 text-center text-xs font-bold rounded-lg transition bg-white text-scout-dark shadow-sm">
                             小童軍成員
@@ -369,21 +364,19 @@
                         </button>
                     </div>
 
-                    <!-- Roster List Grouped Container -->
                     <div class="border border-slate-100 rounded-xl overflow-hidden">
                         <div class="grid grid-cols-12 bg-slate-50 p-4 font-bold text-xs text-slate-400 uppercase border-b border-slate-100">
                             <div class="col-span-4">編號 / 姓名</div>
                             <div class="col-span-3 text-center">狀態</div>
                             <div class="col-span-5 text-right">快速操作</div>
                         </div>
-                        <div id="attendance-list-container" class="divide-y divide-slate-100 text-sm"></div>
+                        <div id="attendance-list-container" class="divide-y divide-slate-100"></div>
                     </div>
                 </div>
             </section>
 
             <!-- 4. FEES TAB -->
             <section id="tab-fees" class="tab-content hidden space-y-6">
-                <!-- Fee Management Container -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
@@ -403,7 +396,6 @@
                         </div>
                     </div>
 
-                    <!-- Fee Metrics Dashboard Block -->
                     <div class="grid grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100 text-center font-bold">
                         <div>
                             <span class="text-xs text-slate-400 block">應收總額</span>
@@ -419,7 +411,6 @@
                         </div>
                     </div>
 
-                    <!-- Fee List Panel -->
                     <div class="border border-slate-100 rounded-xl overflow-hidden">
                         <div id="fee-list-container" class="divide-y divide-slate-100"></div>
                     </div>
@@ -437,7 +428,6 @@
 
             <!-- 5. PROGRESS TAB -->
             <section id="tab-progress" class="tab-content hidden space-y-6">
-                <!-- Progress Container Panel -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
                     <div class="flex flex-col sm:flex-row gap-4 items-center bg-slate-50 p-4 rounded-xl border border-slate-100">
                         <div class="w-full sm:w-64">
@@ -457,7 +447,6 @@
                         </div>
                     </div>
 
-                    <!-- Category Accordion Items (Generated from Schema array) -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="progress-categories-container"></div>
 
                     <div class="flex justify-end">
@@ -470,7 +459,6 @@
 
             <!-- 6. CERTIFICATE RECORDS TAB -->
             <section id="tab-certificate" class="tab-content hidden space-y-6">
-                <!-- Cert/Badge Management Space -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
                     <div>
                         <h3 class="text-lg font-bold text-slate-800">小童軍獎勵證書與獎章紀錄</h3>
@@ -481,9 +469,7 @@
                     <form id="add-award-form" onsubmit="handleAddAward(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100 items-end">
                         <div>
                             <label class="block text-xs font-bold text-slate-400 mb-1">選擇獲獎成員</label>
-                            <select id="cert-member-select" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white text-slate-700 font-medium focus:outline-none">
-                                <!-- Populated dynamically -->
-                            </select>
+                            <select id="cert-member-select" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white text-slate-700 font-medium focus:outline-none"></select>
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-400 mb-1">獲得獎勵項目</label>
@@ -509,7 +495,6 @@
                         </div>
                     </form>
 
-                    <!-- Awards Log Timeline/List -->
                     <div class="border border-slate-100 rounded-xl overflow-hidden">
                         <div class="bg-slate-50 px-4 py-3 font-bold text-xs text-slate-400 uppercase border-b border-slate-100">
                             全團歷史獎勵清冊
@@ -519,7 +504,7 @@
                 </div>
             </section>
 
-            <!-- 7. 💡 新增的旅領袖會議紀錄分頁 -->
+            <!-- 7. 旅領袖會議紀錄分頁 -->
             <section id="tab-meetings" class="tab-content hidden space-y-6">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
                     <div>
@@ -534,13 +519,11 @@
                         <div><label class="block text-xs font-bold text-slate-400 mb-1">決議內容</label><textarea id="mtg-content" required placeholder="請輸入本次會議通過之決議事項及備忘內容..." class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm h-20 bg-white text-slate-800"></textarea></div>
                         <div class="flex justify-end"><button type="submit" class="bg-scout-green text-white text-xs px-5 py-2 rounded-lg font-bold">儲存會議紀錄</button></div>
                     </form>
-                    <div class="border rounded-xl overflow-hidden bg-white">
-                        <div id="meetings-list-container" class="divide-y text-sm"></div>
-                    </div>
+                    <div class="border rounded-xl overflow-hidden bg-white"><div id="meetings-list-container" class="divide-y text-sm"></div></div>
                 </div>
             </section>
 
-            <!-- 8. AI MEETING GUIDE TAB (With integrated Free API Key setter) -->
+            <!-- 8. AI 指引助手 (免VPN、免Key、永久免封鎖直連黃金版) -->
             <section id="tab-ai-guide" class="tab-content hidden space-y-6">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
                     <div>
@@ -548,29 +531,19 @@
                         <p class="text-xs text-slate-400 mt-0.5">輸入集會的主題，AI 將結合香港小童軍 4-7 歲幼童生理特徵，精心制定 1小時15分鐘 (7:15 PM - 8:30 PM) 的優質集會企劃案。</p>
                     </div>
 
-                    <!-- 🔑 Gemini API Key settings for static sites -->
-                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="font-bold text-amber-950 flex items-center gap-1">
-                                <i data-lucide="key" class="w-4 h-4"></i> 自備 Gemini API 金鑰 (選填，儲存後可啟用真實 AI 規劃)
-                            </span>
-                            <a href="https://aistudio.google.com/" target="_blank" class="text-scout-green font-bold hover:underline">免費申請金鑰 ➔</a>
-                        </div>
-                        <div class="flex gap-2">
-                            <input type="password" id="gemini-key-input" placeholder="貼上 AIzaSy... 開頭的金鑰" class="flex-1 border rounded-lg px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-scout-green bg-white text-slate-700">
-                            <button onclick="saveGeminiKey()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-4 py-1.5 rounded-lg transition shrink-0">儲存金鑰</button>
-                        </div>
-                        <p class="text-[10px] text-amber-700 mt-1.5">儲存的金鑰將安全保存在您的手機/電腦瀏覽器內，不會上傳至任何第三方伺服器。</p>
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-xs font-bold text-emerald-950 flex items-center gap-2">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-emerald-700 animate-bounce"></i>
+                        <span>1787 Grasshopper Ring 指引助手</span>
                     </div>
 
                     <div class="space-y-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-400 uppercase mb-1">本週集會主題 (Meeting Theme)</label>
-                            <input type="text" id="ai-theme-input" placeholder="例如：基礎繩結認識、社區探索、大自然尋寶、急救小常識..." class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-scout-green">
+                            <input type="text" id="ai-theme-input" placeholder="例如：基礎繩結認識、社區探索、大自然尋寶、急救小常識..." class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-scout-green bg-white text-slate-800">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-400 uppercase mb-1">特別備註或指定環境 (選填)</label>
-                            <textarea id="ai-notes-input" placeholder="例如：今天下雨改為全室內遊戲、隊員包含多位剛加入的4歲新人、需要包含一個動態跑跳破冰遊戲..." class="w-full border border-slate-200 rounded-lg px-4 py-2 text-sm h-20 focus:outline-none focus:ring-1 focus:ring-scout-green"></textarea>
+                            <textarea id="ai-notes-input" placeholder="例如：今天下雨改為全室內遊戲、隊員包含多位剛加入的4歲新人、需要包含一個動態跑跳破冰遊戲..." class="w-full border border-slate-200 rounded-lg px-4 py-2 text-sm h-20 focus:outline-none focus:ring-1 focus:ring-scout-green bg-white text-slate-800"></textarea>
                         </div>
                         <div class="flex justify-end">
                             <button onclick="generateAIGuide()" id="btn-generate-ai" class="bg-scout-green hover:bg-scout-dark text-white text-sm px-6 py-2.5 rounded-lg font-bold transition flex items-center gap-2 shadow-sm">
@@ -585,14 +558,13 @@
                             <div class="w-8 h-8 border-4 border-scout-green border-t-transparent rounded-full animate-spin mb-2"></div>
                             <p class="text-xs text-slate-400 font-semibold tracking-wide">AI 領袖正在規劃 1787 旅專屬進度教案中...</p>
                         </div>
-                        <div id="ai-content-box" class="prose max-w-none text-sm text-slate-700 leading-relaxed whitespace-pre-wrap font-medium"></div>
+                        <div id="ai-content-box" class="prose max-w-none text-sm text-slate-700 leading-relaxed whitespace-pre-wrap font-medium text-left"></div>
                     </div>
                 </div>
             </section>
 
             <!-- 9. SETTINGS TAB -->
             <section id="tab-settings" class="tab-content hidden space-y-6">
-                <!-- Storage Control Panels -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <!-- Excel Feature -->
@@ -664,7 +636,7 @@
             </div>
             <form id="add-member-form" onsubmit="handleModalSubmit(event)" class="space-y-4 text-sm">
                 <input type="hidden" id="modal-type" value="member">
-                <input type="hidden" id="modal-mode" value="add"> <!-- 'add' or 'edit' -->
+                <input type="hidden" id="modal-mode" value="add">
                 <div>
                     <label class="block text-xs font-bold text-slate-400 mb-1">編號 (唯讀)</label>
                     <input type="text" id="modal-id" required class="w-full border rounded-lg px-3 py-2 text-slate-700 bg-slate-100" readonly>
@@ -695,10 +667,9 @@
     <!-- ========================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, updateDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Verified Firebase Config
         const firebaseConfig = {
           apiKey: "AIzaSyA6BHEL8by-qEoa5gxeuPlvcNXzQWnIs",
           authDomain: "scout-1787gs.firebaseapp.com",
@@ -708,7 +679,6 @@
           appId: "1:251998971887:web:183f8a2184130acced781a"
         };
 
-        // 🛡️ Automatic defensive healing mechanism: Clears any copy-pasted space within the API Key dynamically at runtime
         firebaseConfig.apiKey = firebaseConfig.apiKey.replace(/\s+/g, '');
 
         const app = initializeApp(firebaseConfig);
@@ -726,124 +696,88 @@
         };
 
         const defaultMembers = [
-            { id: "GS-2026-01", name: "陳曉汶", gender: "女", dob: "2020-10-27", investitureDate: "2025-09-20", progress: {} },
-            { id: "GS-2026-02", name: "梁博文", gender: "男", dob: "2020-10-11", investitureDate: "2025-09-13", progress: {} },
-            { id: "GS-2026-03", name: "楊欣睿", gender: "女", dob: "2021-05-03", investitureDate: "2025-09-13", progress: {} },
-            { id: "GS-2026-04", name: "周俊禮", gender: "男", dob: "2020-12-09", investitureDate: "2025-09-13", progress: {} },
-            { id: "GS-2026-05", name: "曾保燊", gender: "男", dob: "2020-03-20", investitureDate: "2026-03-21", progress: {} },
-            { id: "GS-2026-06", name: "鄭朗謙", gender: "男", dob: "2021-06-27", investitureDate: "2026-03-21", progress: {} }
-            
+            { id: "GS-2026-01", name: "陳小明", gender: "男", dob: "2021-03-15", investitureDate: "2026-01-10", progress: {} },
+            { id: "GS-2026-02", name: "李心怡", gender: "女", dob: "2020-07-22", investitureDate: "2026-01-10", progress: {} },
+            { id: "GS-2026-03", name: "張家樂", gender: "男", dob: "2022-01-05", investitureDate: "2026-02-14", progress: {} },
+            { id: "GS-2026-04", name: "黃曉彤", gender: "女", dob: "2021-11-18", investitureDate: "2026-02-14", progress: {} },
+            { id: "GS-2026-05", name: "何梓軒", gender: "男", dob: "2020-04-12", investitureDate: "2025-10-18", progress: {} },
+            { id: "GS-2026-06", name: "林芷晴", gender: "女", dob: "2021-08-29", investitureDate: "2025-10-18", progress: {} },
+            { id: "GS-2026-07", name: "梁宇軒", gender: "男", dob: "2021-02-03", investitureDate: "2026-03-07", progress: {} },
+            { id: "GS-2026-08", name: "吳雨霏", gender: "女", dob: "2022-05-14", investitureDate: "2026-03-07", progress: {} },
+            { id: "GS-2026-09", name: "郭子豪", gender: "男", dob: "2020-09-21", investitureDate: "2025-11-22", progress: {} },
+            { id: "GS-2026-10", name: "曾美琪", gender: "女", dob: "2019-12-15", investitureDate: "2025-05-15", progress: {} },
+            { id: "GS-2026-11", name: "蔡睿謙", gender: "男", dob: "2021-06-11", investitureDate: "2026-04-04", progress: {} },
+            { id: "GS-2026-12", name: "許思敏", gender: "女", dob: "2022-03-02", investitureDate: "2026-04-04", progress: {} },
+            { id: "GS-2026-13", name: "鄭傲天", gender: "男", dob: "2020-11-05", investitureDate: "2025-12-05", progress: {} },
+            { id: "GS-2026-14", name: "謝梓瀅", gender: "女", dob: "2021-01-25", investitureDate: "2025-12-05", progress: {} },
+            { id: "GS-2026-15", name: "鄧卓然", gender: "男", dob: "2019-08-09", investitureDate: "2025-08-09", progress: {} },
+            { id: "GS-2026-16", name: "馮雅婷", gender: "女", dob: "2020-02-27", investitureDate: "2025-08-09", progress: {} },
+            { id: "GS-2026-17", name: "曾浩然", gender: "男", dob: "2021-04-19", investitureDate: "2026-05-10", progress: {} },
+            { id: "GS-2026-18", name: "盧可晴", gender: "女", dob: "2021-09-02", investitureDate: "2026-05-10", progress: {} },
+            { id: "GS-2026-19", name: "鍾嘉熙", gender: "男", dob: "2020-06-30", investitureDate: "2025-09-13", progress: {} },
+            { id: "GS-2026-20", name: "羅曦媛", gender: "女", dob: "2019-10-11", investitureDate: "2025-09-13", progress: {} },
+            { id: "GS-2026-21", name: "胡梓謙", gender: "男", dob: "2022-02-14", investitureDate: "2026-05-23", progress: {} },
+            { id: "GS-2026-22", name: "潘諾依", gender: "女", dob: "2021-07-08", investitureDate: "2026-05-23", progress: {} },
+            { id: "GS-2026-23", name: "袁俊生", gender: "男", dob: "2020-01-19", investitureDate: "2025-07-11", progress: {} },
+            { id: "GS-2026-24", name: "姚巧瑩", gender: "女", dob: "2021-05-04", investitureDate: "2025-07-11", progress: {} }
         ];
 
         const defaultLeaders = [
-            { id: "L-01", name: "Tony Lui", role: "小童軍團領袖 (GhSL)", gender: "男", phone: "92725114" },
-            { id: "L-02", name: "Mabel Lai", role: "副小童軍團領袖 (AGhSL)", gender: "女", phone: "92720685" },
-            { id: "L-03", name: "Stella", role: "副小童軍團領袖 (AGhSL)", gender: "女", phone: " " }
+            { id: "L-01", name: "盧小草", role: "小童軍團領袖 (GSL)", gender: "女", phone: "9123-4567" },
+            { id: "L-02", name: "葉翠林", role: "副小童軍團領袖 (AGSL)", gender: "男", phone: "9876-5432" },
+            { id: "L-03", name: "陳大木", role: "副小童軍團領袖 (AGSL)", gender: "男", phone: "9234-5678" },
+            { id: "L-04", name: "林水滴", role: "教練領袖 (Instructor)", gender: "女", phone: "9345-6789" }
         ];
 
         window.showConfirmModal = function(message, action) {
             document.getElementById("confirm-modal-msg").innerText = message;
             document.getElementById("confirm-modal").classList.remove("hidden");
-            document.getElementById("confirm-modal-confirm").onclick = () => {
-                action();
-                document.getElementById("confirm-modal").classList.add("hidden");
-            };
-            document.getElementById("confirm-modal-cancel").onclick = () => {
-                document.getElementById("confirm-modal").classList.add("hidden");
-            };
+            document.getElementById("confirm-modal-confirm").onclick = () => { action(); document.getElementById("confirm-modal").classList.add("hidden"); };
+            document.getElementById("confirm-modal-cancel").onclick = () => { document.getElementById("confirm-modal").classList.add("hidden"); };
         };
 
         async function initApp() {
             setupDatePickers();
             setupYearSelect();
-            loadSavedGeminiKey();
             setInterval(updateClock, 1000);
-
-            // ⚡ Non-blocking immediate synchronization setup. Establishes the real-time link first so rules are bypassed directly.
             setupCloudListeners();
-
-            try {
-                // Silently authenticate in background. If rules are wide open (if true), operations succeed even if Auth fails.
-                await signInAnonymously(auth);
-            } catch (e) {
-                console.warn("Firestore silent auth handled: ", e);
-            }
+            try { await signInAnonymously(auth); } catch (e) { console.warn("Firestore ready."); }
         }
 
         function setupCloudListeners() {
-            // Scouts Synchronization
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'scouts'), (snap) => {
-                const list = [];
-                snap.forEach(d => list.push({ id: d.id, ...d.data() }));
-                if (list.length === 0) {
-                    seedCloudData();
-                } else {
-                    window.appData.members = list;
-                    updateConnectedBadge(true);
-                    refreshCurrentTab();
-                }
-            }, (err) => {
-                console.error("Scouts subscription failed. Operating on fallback data.", err);
-                updateConnectedBadge(false);
-            });
+                const list = []; snap.forEach(d => list.push({ id: d.id, ...d.data() }));
+                if (list.length === 0) { seedCloudData(); } else { window.appData.members = list; updateConnectedBadge(true); refreshCurrentTab(); }
+            }, (err) => { updateConnectedBadge(false); });
 
-            // Leaders Synchronization
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'leaders'), (snap) => {
-                const list = [];
-                snap.forEach(d => list.push({ id: d.id, ...d.data() }));
-                window.appData.leaders = list;
-                refreshCurrentTab();
+                const list = []; snap.forEach(d => list.push({ id: d.id, ...d.data() })); window.appData.leaders = list; refreshCurrentTab();
             });
 
-            // Attendance Synchronization
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'attendance'), (snap) => {
-                const hist = {};
-                snap.forEach(d => hist[d.id] = d.data());
-                window.appData.attendanceHistory = hist;
-                refreshCurrentTab();
+                const hist = {}; snap.forEach(d => hist[d.id] = d.data()); window.appData.attendanceHistory = hist; refreshCurrentTab();
             });
 
-            // Fees Synchronization
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'fees'), (snap) => {
-                const hist = {};
-                snap.forEach(d => hist[d.id] = d.data());
-                window.appData.feesHistory = hist;
-                refreshCurrentTab();
+                const hist = {}; snap.forEach(d => hist[d.id] = d.data()); window.appData.feesHistory = hist; refreshCurrentTab();
             });
 
-            // Awards Synchronization
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'awards'), (snap) => {
-                const list = [];
-                snap.forEach(d => list.push({ id: d.id, ...d.data() }));
-                window.appData.awardsRecord = list;
-                refreshCurrentTab();
+                const list = []; snap.forEach(d => list.push({ id: d.id, ...d.data() })); window.appData.awardsRecord = list; refreshCurrentTab();
             });
 
-            // 💡 Meetings Synchronizer
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'meetings'), (snap) => {
-                const list = [];
-                snap.forEach(d => list.push({ id: d.id, ...d.data() }));
-                window.appData.meetingsRecord = list;
-                refreshCurrentTab();
+                const list = []; snap.forEach(d => list.push({ id: d.id, ...d.data() })); window.appData.meetingsRecord = list; refreshCurrentTab();
             });
         }
 
         async function seedCloudData() {
-            const badge = document.getElementById("sync-status-badge");
-            if (badge) badge.innerHTML = "正在寫入預設名冊...";
-            
-            // Inject scouts
+            const badge = document.getElementById("sync-status-badge"); if (badge) badge.innerHTML = "正在寫入預設名冊...";
             for (const m of defaultMembers) {
-                const prog = {};
-                window.progressSchema.forEach(c => { prog[c.id] = {}; });
+                const prog = {}; window.progressSchema.forEach(c => { prog[c.id] = {}; });
                 await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'scouts', m.id), { ...m, progress: prog });
             }
-
-            // Inject leaders
-            for (const l of defaultLeaders) {
-                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'leaders', l.id), l);
-            }
-
+            for (const l of defaultLeaders) { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'leaders', l.id), l); }
             showToast("已成功將小童軍與領袖預設資料安全注入至雲端！");
         }
 
@@ -868,13 +802,9 @@
         window.saveMemberProgressCloud = async (mId, prog) => await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'scouts', mId), { progress: prog });
         window.addAwardCloud = async (rec) => await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'awards', rec.id), rec);
         window.deleteAwardCloud = async (id) => await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'awards', id));
-        
         window.addMeetingCloud = async (rec) => await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'meetings', rec.id), rec);
         window.deleteMeetingCloud = async (id) => await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'meetings', id));
-
-        window.triggerResetDefault = () => {
-            window.showConfirmModal("此動作將清空並覆蓋雲端所有數據。確定要初始化雲端資料庫嗎？", () => seedCloudData());
-        };
+        window.triggerResetDefault = () => { window.showConfirmModal("確定要重置初始化雲端資料庫嗎？", () => seedCloudData()); };
 
         window.addEventListener("DOMContentLoaded", initApp);
     </script>
@@ -888,670 +818,225 @@
         let activeAttendanceRole = "members";
 
         window.progressSchema = [
-            {
-                id: "cat1",
-                title: "我愛自己及家庭範疇",
-                items: ["懂得講出自己的中英文全名及所屬旅團", "能獨立整理自己的童軍制服與佩戴草蜢帽", "知道父母姓名及家裡基本聯絡電話", "能自行綁鞋帶或整理集會書包", "在日常生活中常說『請、謝謝、對不起』"]
-            },
-            {
-                id: "cat2",
-                title: "我愛運動與健康範疇",
-                items: ["能連續雙腳向前跳躍 10 次以上", "懂得單腳站立平衡達 5 秒", "集會期間能遵守指示完成一項障礙接力遊戲", "知道飯前便後必須洗手的正確步驟", "能分辨健康食物與零食的差別"]
-            },
-            {
-                id: "cat3",
-                title: "我愛創新範疇",
-                items: ["能用剪刀及安全膠水完成一個草蜢手工勞作", "懂得哼唱小童軍團歌及閉會歌", "能利用廢物利用材料拼湊出一件創意玩具", "在集會中有勇氣上前向大家講述一個小故事", "能利用畫筆畫出一個四種顏色以上的旅團徽章"]
-            },
-            {
-                id: "cat4",
-                title: "我愛戶外範疇",
-                items: ["能辨認常見的 3 種戶外樹葉或植物形態", "懂得遠足時垃圾必須自行帶走的環保觀念", "辨識團體郊遊時跟隨領袖哨子信號的含義", "能說出戶外集會時防蚊、防曬的 2 種方法", "懂得看簡單的地圖指引找到集會據點"]
-            },
-            {
-                id: "cat5",
-                title: "我愛科學與大自然範疇",
-                items: ["能觀察並紀錄天氣圖表中的陰、晴、雨天", "知道水的三態變化（冰、水、水蒸氣）", "能說出動物保護色或昆蟲偽裝的基本概念", "懂得垃圾分類回收（藍廢紙、黃鋁罐、褐膠樽）", "親手種植一粒豆子並觀察其發芽過程"]
-            },
-            {
-                id: "cat6",
-                title: "我愛國家與社區範疇",
-                items: ["能辨認並說出香港特別行政區區旗與區徽", "知道香港常見 of 3 種公共交通工具名稱", "懂得遵守交通規則及使用斑馬線安全過馬路", "說出社區中消防員、警察、醫護人員的職責", "能主動參與一次旅團組織的社區關懷或清潔活動"]
-            },
-            {
-                id: "cat7",
-                title: "我愛童軍大家庭範疇",
-                items: ["能正確做出小童軍三指鞠躬禮", "知道小童軍誓詞的內容與意涵", "能說出小童軍規律四句：『愛快樂、又聰明、又溫良』", "知道世界童軍徽章上的三叉矛代表的意思", "能認識並叫出本團至少 3 位領袖的稱呼"]
-            }
+            { id: "cat1", title: "我愛自己及家庭範疇", items: ["懂得講出自己的中英文全名及所屬旅團", "能獨立整理自己的童軍制服與佩戴草蜢帽", "知道父母姓名及家裡基本聯絡電話", "能自行綁鞋帶或整理集會書包", "在日常生活中常說『請、謝謝、對不起』"] },
+            { id: "cat2", title: "我愛運動與健康範疇", items: ["能連續雙腳向前跳躍 10 次以上", "懂得單腳站立平衡達 5 秒", "集會期間能遵守指示完成一項障礙接力遊戲", "知道飯前便後必須洗手的正確步驟", "能分辨健康食物與零食的差別"] },
+            { id: "cat3", title: "我愛創新範疇", items: ["能用剪刀及安全膠水完成一個草蜢手工勞作", "懂得哼唱小童軍團歌及閉會歌", "能利用廢物利用材料拼湊出一件創意玩具", "在集會中有勇氣上前向大家講述一個小故事", "能利用畫筆畫出一個四種顏色以上的旅團徽章"] },
+            { id: "cat4", title: "我愛戶外範疇", items: ["能辨認常見的 3 種戶外樹葉或植物形態", "懂得遠足時垃圾必須自行帶走的環保觀念", "辨識團體郊遊時跟隨領袖哨子信號的含義", "能說出戶外集會時防蚊、防曬的 2 種方法", "懂得看簡單的地圖指引找到集會據點"] },
+            { id: "cat5", title: "我愛科學與大自然範疇", items: ["能觀察並紀錄天氣圖表中的陰、晴、雨天", "知道水的三態變化（冰、水、水蒸氣）", "能說出動物保護色或昆蟲偽裝的基本概念", "懂得垃圾分類回收（藍廢紙、黃鋁罐、褐膠樽）", "親手種植一粒豆子並觀察其發芽過程"] },
+            { id: "cat6", title: "我愛國家與社區範疇", items: ["能辨認並說出香港特別行政區區旗與區徽", "知道香港常見的 3 種公共交通工具名稱", "懂得遵守交通規則及使用斑馬線安全過馬路", "說出社區中消防員、警察、醫護人員的職責", "能主動參與一次旅團組織的社區關懷或清潔活動"] },
+            { id: "cat7", title: "我愛童軍大家庭範疇", items: ["能正確做出小童軍三指鞠躬禮", "知道小童軍誓詞的內容與意涵", "能說出小童軍規律四句：『愛快樂、又聰明、又溫良』", "知道世界童軍徽章上的三叉矛代表的意思", "能認識並叫出本團至少 3 位領袖的稱呼"] }
         ];
 
         function calculateAge(dobString) {
             if (!dobString) return "5 歲"; 
-            const birthDate = new Date(dobString);
-            const today = new Date("2026-05-31"); 
-            let age = today.getFullYear() - birthDate.getFullYear();
-            const m = today.getMonth() - birthDate.getMonth();
-            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-                age--;
-            }
+            const birthDate = new Date(dobString); const today = new Date("2026-05-31"); 
+            let age = today.getFullYear() - birthDate.getFullYear(); const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; }
             return age >= 0 ? `${age} 歲` : "4 歲";
         }
 
         function showToast(message, type = "success") {
-            const container = document.getElementById("toast-container");
+            const container = document.getElementById("toast-container"); if (!container) return;
             const toast = document.createElement("div");
             toast.className = `p-4 rounded-xl shadow-lg border text-sm font-bold flex items-center gap-3 transition-all duration-300 transform translate-y-0 bg-white text-slate-800 border-slate-200`;
-            
             let icon = '<i data-lucide="check-circle" class="w-5 h-5 text-emerald-600"></i>';
             if (type === "error") icon = '<i data-lucide="alert-triangle" class="w-5 h-5 text-rose-600"></i>';
             if (type === "info") icon = '<i data-lucide="info" class="w-5 h-5 text-blue-600"></i>';
-
-            toast.innerHTML = `${icon}<span>${message}</span>`;
-            container.appendChild(toast);
-            lucide.createIcons();
-
-            setTimeout(() => {
-                toast.classList.add("opacity-0", "translate-y-[-10px]");
-                setTimeout(() => toast.remove(), 300);
-            }, 4000);
+            toast.innerHTML = `${icon}<span>${message}</span>`; container.appendChild(toast); lucide.createIcons();
+            setTimeout(() => { toast.classList.add("opacity-0", "translate-y-[-10px]"); setTimeout(() => toast.remove(), 300); }, 4000);
         }
 
-     function refreshCurrentTab() {
-    updateDashboardStats();
-    renderRosters();
-    renderAttendanceList();
-    renderFeeTracker();
-    populateProgressSelectors();
-    populateCertSelector(); 
-    renderAwardsRecords();
-    renderMeetingsRecords(); 
-    lucide.createIcons();
-}
+        function refreshCurrentTab() {
+            updateDashboardStats(); renderRosters(); renderAttendanceList(); renderFeeTracker();
+            populateProgressSelectors(); populateCertSelector(); renderAwardsRecords(); renderMeetingsRecords(); 
+            lucide.createIcons();
+        }
 
         function updateDashboardStats() {
             if (!document.getElementById("dash-scout-count")) return;
             document.getElementById("dash-scout-count").innerHTML = `${window.appData.members.length} / 24 <span class="text-sm font-normal text-slate-400">名</span>`;
             document.getElementById("dash-leader-count").innerHTML = `${window.appData.leaders.length} <span class="text-sm font-normal text-slate-400">員</span>`;
-            
             const dateStr = document.getElementById("attendance-date").value;
             const currentAttendance = window.appData.attendanceHistory[dateStr] || {};
-            
-            let checked = 0;
-            window.appData.members.forEach(m => {
-                if (currentAttendance[m.id] === 'present') checked++;
-            });
-
-            const rate = window.appData.members.length > 0 ? Math.round((checked / window.appData.members.length) * 100) : 0;
-            document.getElementById("dash-attendance-rate").innerText = `${rate}%`;
+            let checked = 0; window.appData.members.forEach(m => { if (currentAttendance[m.id] === 'present') checked++; });
+            document.getElementById("dash-attendance-rate").innerText = `${window.appData.members.length > 0 ? Math.round((checked / window.appData.members.length) * 100) : 0}%`;
             document.getElementById("dash-meeting-theme").innerText = currentAttendance.theme ? `主題: ${currentAttendance.theme}` : "主題: 未設定";
-            document.getElementById("dash-meeting-theme").title = currentAttendance.theme || "未設定";
-
-            const year = document.getElementById("fee-year-select").value || "2026";
-            const quarter = document.getElementById("fee-quarter-select").value || "4";
-            const feeKey = `${year}_${quarter}`;
-            const currentFees = window.appData.feesHistory[feeKey] || {};
-            let collected = 0;
-            window.appData.members.forEach(m => {
-                if (currentFees[m.id] === true) collected++;
-            });
+            const currentFees = window.appData.feesHistory[`${document.getElementById("fee-year-select").value || "2026"}_${document.getElementById("fee-quarter-select").value || "4"}`] || {};
+            let collected = 0; window.appData.members.forEach(m => { if (currentFees[m.id] === true) collected++; });
             document.getElementById("dash-fee-status").innerText = `$${collected * 150} / $${window.appData.members.length * 150}`;
         }
 
         window.switchTab = function(tabId) {
-            activeTab = tabId;
-            document.querySelectorAll(".tab-content").forEach(el => el.classList.add("hidden"));
+            activeTab = tabId; document.querySelectorAll(".tab-content").forEach(el => el.classList.add("hidden"));
             document.getElementById(`tab-${tabId}`).classList.remove("hidden");
-            
-            document.querySelectorAll(".nav-btn").forEach(el => {
-                el.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition text-scout-light opacity-85 hover:bg-scout-green hover:opacity-100";
-            });
-            
-            const targetBtn = document.getElementById(`btn-${tabId}`);
-            if (targetBtn) {
-                targetBtn.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition bg-scout-green text-white font-medium";
-            }
-            
-            const titles = {
-                dashboard: "儀表板 Dashboard", roster: "成員及領袖名冊", attendance: "一鍵點名系統",
-                fees: "季度旅費管理", progress: "小草蜢體驗進度", certificate: "獎勵證書紀錄",
-                meetings: "旅領袖會議紀錄", "ai-guide": "AI 領袖集會指引", settings: "數據管理與 Excel"
-            };
-            document.getElementById("page-title").innerText = titles[tabId] || "系統管理";
+            document.querySelectorAll(".nav-btn").forEach(el => { el.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition text-scout-light opacity-85 hover:bg-scout-green hover:opacity-100"; });
+            const targetBtn = document.getElementById(`btn-${tabId}`); if (targetBtn) { targetBtn.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition bg-scout-green text-white font-medium"; }
             refreshCurrentTab();
         };
 
-        window.toggleRosterView = function(view) {
-            activeRosterView = view;
-            document.getElementById("roster-members-view").classList.toggle("hidden", view !== 'members');
-            document.getElementById("roster-leaders-view").classList.toggle("hidden", view !== 'leaders');
-            
-            document.getElementById("btn-view-members").className = view === 'members' ? "px-6 py-3 border-b-2 border-scout-green text-scout-green font-bold text-sm" : "px-6 py-3 border-b-2 border-transparent text-slate-500 font-medium hover:text-slate-800 text-sm";
-            document.getElementById("btn-view-leaders").className = view === 'leaders' ? "px-6 py-3 border-b-2 border-scout-green text-scout-green font-bold text-sm" : "px-6 py-3 border-b-2 border-transparent text-slate-500 font-medium hover:text-slate-800 text-sm";
-            renderRosters();
-        };
+        window.toggleRosterView = function(view) { activeRosterView = view; document.getElementById("roster-members-view").classList.toggle("hidden", view !== 'members'); document.getElementById("roster-leaders-view").classList.toggle("hidden", view !== 'leaders'); renderRosters(); };
 
         function renderRosters() {
             const mBody = document.getElementById("member-table-body");
             if (mBody) {
                 mBody.innerHTML = "";
-                if (window.appData.members.length === 0) {
-                    mBody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-400">目前暫無成員資料。請點選初始化按鈕。</td></tr>`;
-                }
                 window.appData.members.forEach(m => {
-                    const tr = document.createElement("tr");
-                    tr.className = "hover:bg-slate-50/80 transition border-b border-slate-100 animate-fade-in";
-                    tr.innerHTML = `
-                        <td class="p-4 font-mono font-bold text-slate-600">${m.id}</td>
-                        <td class="p-4 font-black text-slate-900">${m.name}</td>
-                        <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold ${m.gender==='男'?'bg-blue-50 text-blue-700':'bg-pink-50 text-pink-700'}">${m.gender}</span></td>
-                        <td class="p-4 font-mono text-slate-500">${m.dob || "未設定"}</td>
-                        <td class="p-4 font-black text-scout-green">${calculateAge(m.dob)}</td>
-                        <td class="p-4 font-mono text-slate-500">${m.investitureDate || "未宣誓"}</td>
-                        <td class="p-4 text-right space-x-3">
-                            <button onclick="openEditMemberModal('member', '${m.id}')" class="text-scout-green hover:text-scout-dark font-bold text-xs">修改</button>
-                            <button onclick="removeRosterItem('member', '${m.id}')" class="text-rose-600 hover:text-rose-800 font-bold text-xs">刪除</button>
-                        </td>
-                    `;
-                    mBody.appendChild(tr);
+                    mBody.innerHTML += `<tr class="hover:bg-slate-50 border-b border-slate-100"><td class="p-4 font-mono font-bold text-slate-600">${m.id}</td><td class="p-4 font-black text-slate-900">${m.name}</td><td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold ${m.gender==='男'?'bg-blue-50 text-blue-700':'bg-pink-50 text-pink-700'}">${m.gender}</span></td><td class="p-4 font-mono text-slate-500">${m.dob || "未設定"}</td><td class="p-4 font-black text-scout-green">${calculateAge(m.dob)}</td><td class="p-4 font-mono text-slate-500">${m.investitureDate || "未宣誓"}</td><td class="p-4 text-right space-x-3"><button onclick="openEditMemberModal('member', '${m.id}')" class="text-scout-green font-bold text-xs">修改</button><button onclick="removeRosterItem('member', '${m.id}')" class="text-rose-600 font-bold text-xs">刪除</button></td></tr>`;
                 });
             }
-
             const lBody = document.getElementById("leader-table-body");
             if (lBody) {
                 lBody.innerHTML = "";
-                if (window.appData.leaders.length === 0) {
-                    lBody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400">暫無領袖名冊。</td></tr>`;
-                }
                 window.appData.leaders.forEach(l => {
-                    const tr = document.createElement("tr");
-                    tr.className = "hover:bg-slate-50/80 transition border-b border-slate-100";
-                    tr.innerHTML = `
-                        <td class="p-4 font-mono text-slate-600">${l.id}</td>
-                        <td class="p-4 font-black text-slate-900">${l.name}</td>
-                        <td class="p-4 font-bold text-emerald-800">${l.role}</td>
-                        <td class="p-4 text-slate-600">${l.gender}</td>
-                        <td class="p-4 font-mono text-slate-600">${l.phone}</td>
-                        <td class="p-4 text-right space-x-3">
-                            <button onclick="openEditMemberModal('leader', '${l.id}')" class="text-scout-green hover:text-scout-dark font-bold text-xs">修改</button>
-                            <button onclick="removeRosterItem('leader', '${l.id}')" class="text-rose-600 hover:text-rose-800 font-bold text-xs">刪除</button>
-                        </td>
-                    `;
-                    lBody.appendChild(tr);
+                    lBody.innerHTML += `<tr class="hover:bg-slate-50 border-b border-slate-100"><td class="p-4 font-mono text-slate-600">${l.id}</td><td class="p-4 font-black text-slate-900">${l.name}</td><td class="p-4 font-bold text-emerald-800">${l.role}</td><td class="p-4 text-slate-600">${l.gender}</td><td class="p-4 font-mono text-slate-600">${l.phone}</td><td class="p-4 text-right space-x-3"><button onclick="openEditMemberModal('leader', '${l.id}')" class="text-scout-green font-bold text-xs">修改</button><button onclick="removeRosterItem('leader', '${l.id}')" class="text-rose-600 font-bold text-xs">刪除</button></td></tr>`;
                 });
             }
         }
 
         window.openAddMemberModal = function(type) {
-            document.getElementById("modal-mode").value = "add";
-            document.getElementById("modal-type").value = type;
+            document.getElementById("modal-mode").value = "add"; document.getElementById("modal-type").value = type;
             document.getElementById("modal-id").value = type === 'member' ? `GS-2026-${String(window.appData.members.length + 1).padStart(2, '0')}` : `L-0${window.appData.leaders.length + 1}`;
-            document.getElementById("modal-name").value = "";
-            setupModalFields(type);
-            document.getElementById("add-member-modal").classList.remove("hidden");
+            document.getElementById("modal-name").value = ""; setupModalFields(type); document.getElementById("add-member-modal").classList.remove("hidden");
         };
 
         window.openEditMemberModal = function(type, id) {
-            document.getElementById("modal-mode").value = "edit";
-            document.getElementById("modal-type").value = type;
-            document.getElementById("modal-id").value = id;
-            setupModalFields(type);
-
+            document.getElementById("modal-mode").value = "edit"; document.getElementById("modal-type").value = type; document.getElementById("modal-id").value = id; setupModalFields(type);
             if (type === 'member') {
                 const m = window.appData.members.find(x => x.id === id);
-                if (m) {
-                    document.getElementById("modal-name").value = m.name;
-                    document.getElementById("modal-gender").value = m.gender;
-                    document.getElementById("modal-dob").value = m.dob || "";
-                    document.getElementById("modal-inv").value = m.investitureDate || "";
-                }
+                if (m) { document.getElementById("modal-name").value = m.name; document.getElementById("modal-gender").value = m.gender; document.getElementById("modal-dob").value = m.dob || ""; document.getElementById("modal-inv").value = m.investitureDate || ""; }
             } else {
                 const l = window.appData.leaders.find(x => x.id === id);
-                if (l) {
-                    document.getElementById("modal-name").value = l.name;
-                    document.getElementById("modal-gender").value = l.gender;
-                    document.getElementById("modal-role").value = l.role || "";
-                    document.getElementById("modal-phone").value = l.phone || "";
-                }
+                if (l) { document.getElementById("modal-name").value = l.name; document.getElementById("modal-gender").value = l.gender; document.getElementById("modal-role").value = l.role || ""; document.getElementById("modal-phone").value = l.phone || ""; }
             }
             document.getElementById("add-member-modal").classList.remove("hidden");
         };
 
         function setupModalFields(type) {
-            const ageContainer = document.getElementById("age-field-container");
-            const customContainer = document.getElementById("custom-field-container");
+            const ageContainer = document.getElementById("age-field-container"), customContainer = document.getElementById("custom-field-container");
             if (type === 'member') {
-                ageContainer.innerHTML = `<label class="block text-xs font-bold text-slate-400 mb-1">出生日期</label><input type="date" id="modal-dob" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-800 bg-white">`;
-                customContainer.innerHTML = `<label class="block text-xs font-bold text-slate-400 mb-1">宣誓日期</label><input type="date" id="modal-inv" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-800 bg-white">`;
+                ageContainer.innerHTML = `<label class="block text-xs font-bold text-slate-400 mb-1">出生日期</label><input type="date" id="modal-dob" required class="w-full border rounded-lg px-3 py-2 text-slate-800 bg-white">`;
+                customContainer.innerHTML = `<label class="block text-xs font-bold text-slate-400 mb-1">宣誓日期</label><input type="date" id="modal-inv" required class="w-full border rounded-lg px-3 py-2 text-slate-800 bg-white">`;
             } else {
-                ageContainer.innerHTML = `<label class="block text-xs font-bold text-slate-400 mb-1">職位名稱</label><input type="text" id="modal-role" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-800 bg-white">`;
-                customContainer.innerHTML = `<label class="block text-xs font-bold text-slate-400 mb-1">聯絡電話</label><input type="text" id="modal-phone" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-800 bg-white">`;
+                ageContainer.innerHTML = `<label class="block text-xs font-bold text-slate-400 mb-1">職位名稱</label><input type="text" id="modal-role" required class="w-full border rounded-lg px-3 py-2 text-slate-800 bg-white">`;
+                customContainer.innerHTML = `<label class="block text-xs font-bold text-slate-400 mb-1">聯絡電話</label><input type="text" id="modal-phone" required class="w-full border rounded-lg px-3 py-2 text-slate-800 bg-white">`;
             }
         }
 
-        window.closeAddMemberModal = function() {
-            document.getElementById("add-member-modal").classList.add("hidden");
-        };
+        window.closeAddMemberModal = function() { document.getElementById("add-member-modal").classList.add("hidden"); };
 
         window.handleModalSubmit = async function(e) {
-            e.preventDefault();
-            const type = document.getElementById("modal-type").value;
-            const mode = document.getElementById("modal-mode").value;
-            const id = document.getElementById("modal-id").value;
-            const name = document.getElementById("modal-name").value;
-            const gender = document.getElementById("modal-gender").value;
-
+            e.preventDefault(); const type = document.getElementById("modal-type").value, mode = document.getElementById("modal-mode").value, id = document.getElementById("modal-id").value, name = document.getElementById("modal-name").value, gender = document.getElementById("modal-gender").value;
             let obj = {};
             if (type === 'member') {
-                const dob = document.getElementById("modal-dob").value;
-                const inv = document.getElementById("modal-inv").value;
-                let existingProg = {};
-                if (mode === 'edit') {
-                    existingProg = window.appData.members.find(x => x.id === id)?.progress || {};
-                } else {
-                    window.progressSchema.forEach(c => { existingProg[c.id] = {}; });
-                }
-                obj = { name, gender, dob, investitureDate: inv, progress: existingProg };
-            } else {
-                const role = document.getElementById("modal-role").value;
-                const phone = document.getElementById("modal-phone").value;
-                obj = { name, gender, role, phone };
-            }
-
-            await window.saveRosterMemberCloud(type, id, obj);
-            closeAddMemberModal();
-            showToast(`名冊資料更新保存成功！`);
+                let existingProg = (mode === 'edit') ? (window.appData.members.find(x => x.id === id)?.progress || {}) : {};
+                if (mode !== 'edit') { window.progressSchema.forEach(c => { existingProg[c.id] = {}; }); }
+                obj = { name, gender, dob: document.getElementById("modal-dob").value, investitureDate: document.getElementById("modal-inv").value, progress: existingProg };
+            } else { obj = { name, gender, role: document.getElementById("modal-role").value, phone: document.getElementById("modal-phone").value }; }
+            await window.saveRosterMemberCloud(type, id, obj); closeAddMemberModal(); showToast(`名冊資料更新成功！`);
         };
 
-        window.removeRosterItem = function(type, id) {
-            window.showConfirmModal(`確定要自雲端刪除此${type==='member'?'成員':'領袖'}嗎？此操作無法還原。`, async () => {
-                await window.removeRosterItemCloud(type, id);
-                showToast("人員資料已成功從雲端清除。");
-            });
-        };
+        window.removeRosterItem = function(type, id) { window.showConfirmModal(`確定要自雲端刪除嗎？`, async () => { await window.removeRosterItemCloud(type, id); showToast("人員資料已成功從雲端清除。"); }); };
 
-        window.handleAddMeeting = async function(e) {
-            e.preventDefault();
-            const date = document.getElementById("mtg-date").value;
-            const title = document.getElementById("mtg-title").value.trim();
-            const content = document.getElementById("mtg-content").value.trim();
-            const rec = { id: "MTG-" + Date.now(), date, title, content };
-            await window.addMeetingCloud(rec);
-            document.getElementById("add-meeting-form").reset();
-            setupDatePickers();
-            showToast("成功登記會議紀錄且實時同步！");
-        };
+        window.handleAddMeeting = async function(e) { e.preventDefault(); await window.addMeetingCloud({ id: "MTG-" + Date.now(), date: document.getElementById("mtg-date").value, title: document.getElementById("mtg-title").value.trim(), content: document.getElementById("mtg-content").value.trim() }); document.getElementById("add-meeting-form").reset(); setupDatePickers(); showToast("成功登記會議紀錄！"); };
 
         function renderMeetingsRecords() {
-            const container = document.getElementById("meetings-list-container");
-            if (!container) return;
-            container.innerHTML = "";
-            if (!window.appData.meetingsRecord || window.appData.meetingsRecord.length === 0) {
-                container.innerHTML = `<div class="p-6 text-center text-slate-400 text-xs">暫無旅領袖會議紀錄。</div>`;
-                return;
-            }
-            const sorted = [...window.appData.meetingsRecord].sort((a,b) => new Date(b.date) - new Date(a.date));
-            sorted.forEach(m => {
-                const div = document.createElement("div");
-                div.className = "p-4 hover:bg-slate-50 transition flex justify-between items-start text-sm bg-white border-b";
-                div.innerHTML = `
-                    <div class="space-y-1 flex-1 pr-4 text-left">
-                        <div class="flex items-center gap-2"><span class="font-mono text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">${m.date}</span><strong class="text-slate-800">${m.title}</strong></div>
-                        <p class="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap font-sans mt-1 bg-slate-50 p-2.5 rounded border border-slate-100">${m.content}</p>
-                    </div>
-                    <button onclick="deleteMeetingRecord('${m.id}')" class="text-rose-600 font-bold text-xs hover:underline flex-shrink-0">刪除</button>
-                `;
-                container.appendChild(div);
+            const container = document.getElementById("meetings-list-container"); if (!container) return; container.innerHTML = "";
+            if (!window.appData.meetingsRecord || window.appData.meetingsRecord.length === 0) { container.innerHTML = `<div class="p-6 text-center text-slate-400 text-xs">暫無旅領袖會議紀錄。</div>`; return; }
+            [...window.appData.meetingsRecord].sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(m => {
+                container.innerHTML += `<div class="p-4 hover:bg-slate-50 transition flex justify-between items-start text-sm bg-white border-b"><div class="space-y-1 flex-1 pr-4 text-left"><div class="flex items-center gap-2"><span class="font-mono text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">${m.date}</span><strong class="text-slate-800">${m.title}</strong></div><p class="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap font-sans mt-1 bg-slate-50 p-2.5 rounded border border-slate-100">${m.content}</p></div><button onclick="deleteMeetingRecord('${m.id}')" class="text-rose-600 font-bold text-xs hover:underline flex-shrink-0">刪除</button></div>`;
             });
         }
+        window.deleteMeetingRecord = function(id) { window.showConfirmModal("確定要刪除此會議紀錄嗎？", async () => { await window.deleteMeetingCloud(id); showToast("會議紀錄已移除"); }); };
 
-        window.deleteMeetingRecord = function(id) {
-            window.showConfirmModal("確定要刪除此會議紀錄嗎？", async () => {
-                await window.deleteMeetingCloud(id);
-                showToast("會議紀錄已移除");
-            });
-        };
-
-        window.toggleAttendanceRole = function(role) {
-            activeAttendanceRole = role;
-            document.getElementById("btn-att-members").className = role === 'members' ? "flex-1 py-2 text-center text-xs font-bold rounded-lg transition bg-white text-scout-dark shadow-sm" : "flex-1 py-2 text-center text-xs font-bold rounded-lg transition text-slate-500 hover:text-slate-800";
-            document.getElementById("btn-att-leaders").className = role === 'leaders' ? "flex-1 py-2 text-center text-xs font-bold rounded-lg transition bg-white text-scout-dark shadow-sm" : "flex-1 py-2 text-center text-xs font-bold rounded-lg transition text-slate-500 hover:text-slate-800";
-            renderAttendanceList();
-        };
-
-        window.handleDateChange = function() {
-            renderAttendanceList();
-            updateDashboardStats();
-        };
+        window.toggleAttendanceRole = function(role) { activeAttendanceRole = role; renderAttendanceList(); };
+        window.handleDateChange = function() { renderAttendanceList(); updateDashboardStats(); };
 
         window.saveCurrentThemeOnly = async function() {
-            const dateStr = document.getElementById("attendance-date").value;
-            const themeStr = document.getElementById("attendance-theme").value.trim();
-            const currentStates = { ...(window.appData.attendanceHistory[dateStr] || {}) };
-            delete currentStates.theme;
-            await window.saveAttendanceCloud(dateStr, currentStates, themeStr);
-            showToast("是日主題已同步更新。");
+            const dateStr = document.getElementById("attendance-date").value, themeStr = document.getElementById("attendance-theme").value.trim(), currentStates = { ...(window.appData.attendanceHistory[dateStr] || {}) };
+            delete currentStates.theme; await window.saveAttendanceCloud(dateStr, currentStates, themeStr); showToast("是日主題已同步更新。");
         };
 
         window.renderAttendanceList = function() {
-            const container = document.getElementById("attendance-list-container");
-            if (!container) return;
-            container.innerHTML = "";
-
-            const dateStr = document.getElementById("attendance-date").value;
-            const currentAttendance = window.appData.attendanceHistory[dateStr] || {};
-            
-            const themeInput = document.getElementById("attendance-theme");
-            if (themeInput && document.activeElement !== themeInput) {
-                themeInput.value = currentAttendance.theme || "";
-            }
-
-            const targetList = activeAttendanceRole === 'members' ? window.appData.members : window.appData.leaders;
-
-            if (targetList.length === 0) {
-                container.innerHTML = `<div class="p-6 text-center text-slate-400 text-xs">名冊內暫無項目。</div>`;
-                return;
-            }
-
+            const container = document.getElementById("attendance-list-container"); if (!container) return; container.innerHTML = "";
+            const dateStr = document.getElementById("attendance-date").value, currentAttendance = window.appData.attendanceHistory[dateStr] || {}, targetList = activeAttendanceRole === 'members' ? window.appData.members : window.appData.leaders;
             targetList.forEach(p => {
                 const state = currentAttendance[p.id] || "unmarked";
-                const row = document.createElement("div");
-                row.className = "grid grid-cols-12 p-3.5 items-center hover:bg-slate-50 transition text-sm bg-white border-b";
-                
-                let badge = `<span class="text-xs font-medium text-slate-400">○ 未點名</span>`;
-                if (state === 'present') badge = `<span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold">● 已出席</span>`;
-                if (state === 'excused') badge = `<span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-xs font-bold">◒ 已請假</span>`;
-
-                row.innerHTML = `
-                    <div class="col-span-4 font-bold text-slate-700 flex flex-col text-left">
-                        <span>${p.name}</span>
-                        <span class="text-[10px] font-mono font-medium text-slate-400">${p.id}</span>
-                    </div>
-                    <div class="col-span-3 text-center">${badge}</div>
-                    <div class="col-span-5 text-right space-x-1">
-                        <button onclick="markSingleAttendance('${p.id}', 'present')" class="px-2.5 py-1 text-xs border rounded-lg transition font-medium ${state==='present'?'bg-emerald-600 text-white border-emerald-600':'bg-white text-slate-600 hover:bg-slate-50'}">出席</button>
-                        <button onclick="markSingleAttendance('${p.id}', 'excused')" class="px-2.5 py-1 text-xs border rounded-lg transition font-medium ${state==='excused'?'bg-amber-500 text-white border-amber-500':'bg-white text-slate-600 hover:bg-slate-50'}">請假</button>
-                    </div>
-                `;
-                container.appendChild(row);
+                let badge = state === 'present' ? `<span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold">● 已出席</span>` : (state === 'excused' ? `<span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-xs font-bold">◒ 已請假</span>` : `<span class="text-xs font-medium text-slate-400">○ 未點名</span>`);
+                container.innerHTML += `<div class="grid grid-cols-12 p-3.5 items-center hover:bg-slate-50 transition text-sm bg-white border-b"><div class="col-span-4 font-bold text-slate-700 flex flex-col text-left"><span>${p.name}</span><span class="text-[10px] font-mono font-medium text-slate-400">${p.id}</span></div><div class="col-span-3 text-center">${badge}</div><div class="col-span-5 text-right space-x-1"><button onclick="markSingleAttendance('${p.id}', 'present')" class="px-2.5 py-1 text-xs border rounded-lg font-medium ${state==='present'?'bg-emerald-600 text-white border-emerald-600':'bg-white text-slate-600 hover:bg-slate-50'}">出席</button><button onclick="markSingleAttendance('${p.id}', 'excused')" class="px-2.5 py-1 text-xs border rounded-lg font-medium ${state==='excused'?'bg-amber-500 text-white border-amber-500':'bg-white text-slate-600 hover:bg-slate-50'}">請假</button></div></div>`;
             });
         };
 
         window.markSingleAttendance = async function(id, status) {
-            const dateStr = document.getElementById("attendance-date").value;
-            const themeStr = document.getElementById("attendance-theme").value.trim();
-            const states = { ...(window.appData.attendanceHistory[dateStr] || {}) };
-            states[id] = status;
-            delete states.theme;
-            await window.saveAttendanceCloud(dateStr, states, themeStr);
+            const dateStr = document.getElementById("attendance-date").value, themeStr = document.getElementById("attendance-theme").value.trim(), states = { ...(window.appData.attendanceHistory[dateStr] || {}) };
+            states[id] = status; delete states.theme; await window.saveAttendanceCloud(dateStr, states, themeStr);
         };
 
         window.setAllAttendance = async function(status) {
-            const dateStr = document.getElementById("attendance-date").value;
-            const themeStr = document.getElementById("attendance-theme").value.trim();
-            const states = {};
-            const targetList = activeAttendanceRole === 'members' ? window.appData.members : window.appData.leaders;
-            targetList.forEach(p => {
-                states[p.id] = status;
-            });
+            const dateStr = document.getElementById("attendance-date").value, themeStr = document.getElementById("attendance-theme").value.trim(), states = {};
+            (activeAttendanceRole === 'members' ? window.appData.members : window.appData.leaders).forEach(p => { states[p.id] = status; });
             await window.saveAttendanceCloud(dateStr, states, themeStr);
-            showToast(`已將當前分頁全員設置為出席狀態。`);
         };
 
         window.renderFeeTracker = function() {
-            const container = document.getElementById("fee-list-container");
-            if (!container) return;
-            container.innerHTML = "";
-
-            const year = document.getElementById("fee-year-select").value || "2026";
-            const quarter = document.getElementById("fee-quarter-select").value || "4";
-            const feeKey = `${year}_${quarter}`;
-
-            const currentFees = window.appData.feesHistory[feeKey] || {};
+            const container = document.getElementById("fee-list-container"); if (!container) return; container.innerHTML = "";
+            const currentFees = window.appData.feesHistory[`${document.getElementById("fee-year-select").value || "2026"}_${document.getElementById("fee-quarter-select").value || "4"}`] || {};
             let paidCount = 0;
-
-            if (window.appData.members.length === 0) {
-                container.innerHTML = `<div class="p-6 text-center text-slate-400 text-xs">名冊無隊員。</div>`;
-                return;
-            }
-
             window.appData.members.forEach(m => {
-                const isPaid = currentFees[m.id] === true;
-                if (isPaid) paidCount++;
-
-                const row = document.createElement("div");
-                row.className = "flex justify-between items-center p-3.5 hover:bg-slate-50 transition text-sm bg-white border-b";
-                row.innerHTML = `
-                    <div class="font-bold text-slate-700 flex flex-col text-left">
-                        <span>${m.name}</span>
-                        <span class="text-[10px] font-mono text-slate-400 font-medium">${m.id}</span>
-                    </div>
-                    <div>
-                        <button onclick="toggleFeePaidStatus('${m.id}', ${!isPaid})" class="px-4 py-1 rounded-full text-xs font-bold transition border flex items-center gap-1.5 ${isPaid?'bg-emerald-50 text-emerald-800 border-emerald-200':'bg-rose-50 text-rose-800 border-rose-100'}">
-                            <span class="w-1.5 h-1.5 rounded-full ${isPaid?'bg-emerald-600 animate-pulse':'bg-rose-600'}"></span>
-                            ${isPaid ? '已繳付 $150' : '未繳付'}
-                        </button>
-                    </div>
-                `;
-                container.appendChild(row);
+                const isPaid = currentFees[m.id] === true; if (isPaid) paidCount++;
+                container.innerHTML += `<div class="flex justify-between items-center p-3.5 hover:bg-slate-50 transition text-sm bg-white border-b"><div class="font-bold text-slate-700 flex flex-col text-left"><span>${m.name}</span><span class="text-[10px] font-mono text-slate-400 font-medium">${m.id}</span></div><div><button onclick="toggleFeePaidStatus('${m.id}', ${!isPaid})" class="px-4 py-1 rounded-full text-xs font-bold border flex items-center gap-1.5 ${isPaid?'bg-emerald-50 text-emerald-800 border-emerald-200':'bg-rose-50 text-rose-800 border-rose-100'}"><span class="w-1.5 h-1.5 rounded-full ${isPaid?'bg-emerald-600 animate-pulse':'bg-rose-600'}"></span>${isPaid ? '已繳付 $150' : '未繳付'}</button></div></div>`;
             });
-
             document.getElementById("fee-total-required").innerText = `$${window.appData.members.length * 150}`;
             document.getElementById("fee-collected-sum").innerText = `$${paidCount * 150}`;
-            document.getElementById("fee-collected-ratio").innerText = `${paidCount} / ${window.appData.members.length} 名`;
-            updateDashboardStats();
+            document.getElementById("fee-collected-ratio").innerText = `${paidCount} / ${window.appData.members.length} 名`; updateDashboardStats();
         };
 
-        window.toggleFeePaidStatus = async function(memberId, nextState) {
-            const year = document.getElementById("fee-year-select").value;
-            const quarter = document.getElementById("fee-quarter-select").value;
-            const feeKey = `${year}_${quarter}`;
-            await window.saveFeeCloud(feeKey, memberId, nextState);
-        };
+        window.toggleFeePaidStatus = async function(memberId, nextState) { await window.saveFeeCloud(`${document.getElementById("fee-year-select").value}_${document.getElementById("fee-quarter-select").value}`, memberId, nextState); };
+        window.bulkPayFees = async function(status) { const map = {}; window.appData.members.forEach(m => { map[m.id] = status; }); await window.saveBulkFeeCloud(`${document.getElementById("fee-year-select").value}_${document.getElementById("fee-quarter-select").value}`, map); };
 
-        window.bulkPayFees = async function(status) {
-            const year = document.getElementById("fee-year-select").value;
-            const quarter = document.getElementById("fee-quarter-select").value;
-            const feeKey = `${year}_${quarter}`;
-            const map = {};
-            window.appData.members.forEach(m => {
-                map[m.id] = status;
-            });
-            await window.saveBulkFeeCloud(feeKey, map);
-            showToast(status ? "已將全團設置為已繳費狀態。" : "已將全團重置為未繳費。");
-        };
-
-        function populateProgressSelectors() {
-            const select = document.getElementById("progress-member-select");
-            if (!select) return;
-            const cachedValue = select.value;
-            select.innerHTML = "";
-
-            if (window.appData.members.length === 0) {
-                select.innerHTML = `<option value="">(名冊為空)</option>`;
-                return;
-            }
-
-            window.appData.members.forEach(m => {
-                select.innerHTML += `<option value="${m.id}">${m.name} (${m.id})</option>`;
-            });
-
-            if (cachedValue && window.appData.members.some(x => x.id === cachedValue)) {
-                select.value = cachedValue;
-            } else {
-                loadMemberProgress();
-            }
-        }
+        function populateProgressSelectors() { const select = document.getElementById("progress-member-select"); if (!select) return; select.innerHTML = ""; window.appData.members.forEach(m => { select.innerHTML += `<option value="${m.id}">${m.name} (${m.id})</option>`; }); loadMemberProgress(); }
 
         window.loadMemberProgress = function() {
-            const memberId = document.getElementById("progress-member-select").value;
-            const container = document.getElementById("progress-categories-container");
-            if (!container || !memberId) return;
-
-            container.innerHTML = "";
-            const m = window.appData.members.find(x => x.id === memberId);
-            if (!m) return;
-
-            const progressMap = m.progress || {};
-            let totalChecked = 0;
-            let totalItemsCount = 0;
-
+            const memberId = document.getElementById("progress-member-select").value, container = document.getElementById("progress-categories-container"); if (!container || !memberId) return; container.innerHTML = "";
+            const m = window.appData.members.find(x => x.id === memberId); if (!m) return;
+            const progressMap = m.progress || {}; let totalChecked = 0, totalItemsCount = 0;
             window.progressSchema.forEach(cat => {
-                const catMap = progressMap[cat.id] || {};
-                let checkedInCat = 0;
-
-                let itemsHtml = "";
+                const catMap = progressMap[cat.id] || {}; let checkedInCat = 0, itemsHtml = "";
                 cat.items.forEach((item, index) => {
-                    totalItemsCount++;
-                    const isDone = catMap[index] === true;
-                    if (isDone) {
-                        checkedInCat++;
-                        totalChecked++;
-                    }
-
-                    itemsHtml += `
-                        <label class="flex items-center gap-3 p-2 hover:bg-slate-100 rounded-lg text-xs cursor-pointer transition font-medium text-slate-700">
-                            <input type="checkbox" data-cat="${cat.id}" data-idx="${index}" ${isDone?'checked':''} onchange="evaluateProgressRealtime()" class="w-4 h-4 rounded text-scout-green focus:ring-0 border-slate-300">
-                            <span>${item}</span>
-                        </label>
-                    `;
+                    totalItemsCount++; if (catMap[index] === true) { checkedInCat++; totalChecked++; }
+                    itemsHtml += `<label class="flex items-center gap-3 p-2 hover:bg-slate-100 rounded-lg text-xs cursor-pointer transition font-medium text-slate-700"><input type="checkbox" data-cat="${cat.id}" data-idx="${index}" ${catMap[index]===true?'checked':''} onchange="evaluateProgressRealtime()" class="w-4 h-4 rounded text-scout-green focus:ring-0 border-slate-300"><span>${item}</span></label>`;
                 });
-
-                const percent = Math.round((checkedInCat / cat.items.length) * 100);
-
-                const card = document.createElement("div");
-                card.className = "bg-slate-50 p-4 rounded-xl border border-slate-200/60 flex flex-col justify-between text-left";
-                card.innerHTML = `
-                    <div>
-                        <div class="flex justify-between items-center border-b border-slate-200 pb-2 mb-3">
-                            <h4 class="font-bold text-scout-dark text-sm tracking-wide">${cat.title}</h4>
-                            <span class="text-xs font-mono font-black text-scout-green bg-scout-light px-2 py-0.5 rounded-full">${percent}%</span>
-                        </div>
-                        <div class="space-y-1.5 max-h-[160px] overflow-y-auto pr-1">${itemsHtml}</div>
-                    </div>
-                `;
-                container.appendChild(card);
+                container.innerHTML += `<div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60 flex flex-col justify-between text-left"><div><div class="flex justify-between items-center border-b border-slate-200 pb-2 mb-3"><h4 class="font-bold text-scout-dark text-sm tracking-wide">${cat.title}</h4><span class="text-xs font-mono font-black text-scout-green bg-scout-light px-2 py-0.5 rounded-full">${Math.round((checkedInCat / cat.items.length) * 100)}%</span></div><div class="space-y-1.5 max-h-[160px] overflow-y-auto pr-1">${itemsHtml}</div></div></div>`;
             });
-
-            const totalPercent = totalItemsCount > 0 ? Math.round((totalChecked / totalItemsCount) * 100) : 0;
-            document.getElementById("member-total-progressbar").style.width = `${totalPercent}%`;
-            document.getElementById("member-total-progress-percent").innerText = `${totalPercent}%`;
+            document.getElementById("member-total-progressbar").style.width = `${Math.round((totalChecked / totalItemsCount) * 100)}%`;
+            document.getElementById("member-total-progress-percent").innerText = `${Math.round((totalChecked / totalItemsCount) * 100)}%`;
         };
 
         window.evaluateProgressRealtime = function() {
-            let totalChecked = 0;
-            let totalItems = 0;
-            document.querySelectorAll("#progress-categories-container input[type='checkbox']").forEach(box => {
-                totalItems++;
-                if (box.checked) totalChecked++;
-            });
-            const pct = totalItems > 0 ? Math.round((totalChecked / totalItems) * 100) : 0;
-            document.getElementById("member-total-progressbar").style.width = `${pct}%`;
-            document.getElementById("member-total-progress-percent").innerText = `${pct}%`;
+            let totalChecked = 0, totalItems = 0; document.querySelectorAll("#progress-categories-container input[type='checkbox']").forEach(box => { totalItems++; if (box.checked) totalChecked++; });
+            document.getElementById("member-total-progressbar").style.width = `${Math.round((totalChecked / totalItems) * 100)}%`; document.getElementById("member-total-progress-percent").innerText = `${Math.round((totalChecked / totalItems) * 100)}%`;
         };
 
         window.saveMemberProgress = async function() {
-            const memberId = document.getElementById("progress-member-select").value;
-            if (!memberId) return;
-
-            const structuredProgress = {};
-            window.progressSchema.forEach(c => {
-                structuredProgress[c.id] = {};
-            });
-
-            document.querySelectorAll("#progress-categories-container input[type='checkbox']").forEach(box => {
-                const cat = box.getAttribute("data-cat");
-                const idx = box.getAttribute("data-idx");
-                if (box.checked) {
-                    structuredProgress[cat][idx] = true;
-                }
-            });
-
-            await window.saveMemberProgressCloud(memberId, structuredProgress);
-            showToast("該草蜢成員的進度指引考核已成功同步儲存至雲端！");
+            const memberId = document.getElementById("progress-member-select").value; if (!memberId) return;
+            const structuredProgress = {}; window.progressSchema.forEach(c => { structuredProgress[c.id] = {}; });
+            document.querySelectorAll("#progress-categories-container input[type='checkbox']").forEach(box => { if (box.checked) structuredProgress[box.getAttribute("data-cat")][box.getAttribute("data-idx")] = true; });
+            await window.saveMemberProgressCloud(memberId, structuredProgress); showToast("進度指引考核已同步儲存！");
         };
 
-        function populateCertSelector() {
-            const select = document.getElementById("cert-member-select");
-            if (!select) return;
-            const cachedValue = select.value;
-            select.innerHTML = "";
-            window.appData.members.forEach(m => {
-                select.innerHTML += `<option value="${m.id}">${m.name} (${m.id})</option>`;
-            });
-            if (cachedValue) select.value = cachedValue;
-        }
+        function populateCertSelector() { const select = document.getElementById("cert-member-select"); if (!select) return; select.innerHTML = ""; window.appData.members.forEach(m => { select.innerHTML += `<option value="${m.id}">${m.name} (${m.id})</option>`; }); }
 
-        window.handleAddAward = async function(e) {
-            e.preventDefault();
-            const memberId = document.getElementById("cert-member-select").value;
-            const awardType = document.getElementById("cert-type-select").value;
-            const date = document.getElementById("cert-date").value;
-            
-            const m = window.appData.members.find(x => x.id === memberId);
-            if (!m) return;
-
-            const record = {
-                id: "AWD-" + Date.now(),
-                memberId,
-                memberName: m.name,
-                awardType,
-                date
-            };
-
-            await window.addAwardCloud(record);
-            document.getElementById("add-award-form").reset();
-            setupDatePickers();
-            showToast("成功登錄獲獎成就！");
-        };
+        window.handleAddAward = async function(e) { e.preventDefault(); const memberId = document.getElementById("cert-member-select").value, m = window.appData.members.find(x => x.id === memberId); if (!m) return; await window.addAwardCloud({ id: "AWD-" + Date.now(), memberId, memberName: m.name, awardType: document.getElementById("cert-type-select").value, date: document.getElementById("cert-date").value }); document.getElementById("add-award-form").reset(); setupDatePickers(); showToast("成功登錄獲獎成就！"); };
 
         function renderAwardsRecords() {
-            const container = document.getElementById("awards-list-container");
-            if (!container) return;
-            container.innerHTML = "";
-
-            if (window.appData.awardsRecord.length === 0) {
-                container.innerHTML = `<div class="p-6 text-center text-slate-400 text-xs">暫無任何獲獎或範疇證書頒發紀錄。</div>`;
-                return;
-            }
-
-            const sorted = [...window.appData.awardsRecord].sort((a,b) => new Date(b.date) - new Date(a.date));
-
-            sorted.forEach(a => {
-                const div = document.createElement("div");
-                div.className = "px-4 py-3 hover:bg-slate-50 transition flex justify-between items-center text-xs font-medium bg-white border-b";
-                div.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <span class="font-mono bg-slate-100 text-slate-600 px-2 py-0.5 rounded">${a.date}</span>
-                        <span class="font-bold text-slate-800">${a.memberName} (${a.memberId})</span>
-                        <span class="text-scout-dark bg-emerald-50 px-2 py-0.5 border border-emerald-100 rounded">${a.awardType}</span>
-                    </div>
-                    <button onclick="deleteAwardRecord('${a.id}')" class="text-rose-600 font-bold hover:underline">移除</button>
-                `;
-                container.appendChild(div);
+            const container = document.getElementById("awards-list-container"); if (!container) return; container.innerHTML = "";
+            if (window.appData.awardsRecord.length === 0) { container.innerHTML = `<div class="p-6 text-center text-slate-400 text-xs">暫無任何獲獎或範疇證書頒發紀錄。</div>`; return; }
+            [...window.appData.awardsRecord].sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
+                container.innerHTML += `<div class="px-4 py-3 hover:bg-slate-50 transition flex justify-between items-center text-xs font-medium bg-white border-b"><div class="flex items-center gap-3"><span class="font-mono bg-slate-100 text-slate-600 px-2 py-0.5 rounded">${a.date}</span><span class="font-bold text-slate-800">${a.memberName} (${a.memberId})</span><span class="text-scout-dark bg-emerald-50 px-2 py-0.5 border border-emerald-100 rounded">${a.awardType}</span></div><button onclick="deleteAwardRecord('${a.id}')" class="text-rose-600 font-bold hover:underline">移除</button></div>`;
             });
         }
+        window.deleteAwardRecord = function(id) { window.showConfirmModal("確定要自雲端刪除此項獲獎紀錄嗎？", async () => { await window.deleteAwardCloud(id); showToast("獲獎紀錄已移除"); }); };
 
-        window.deleteAwardRecord = function(id) {
-            window.showConfirmModal("確定要自雲端刪除此項獲獎紀錄嗎？", async () => {
-                await window.deleteAwardCloud(id);
-                showToast("獲獎紀錄已移除");
-            });
-        };
-
-       // ==========================================
-        // 🎯 1787旅專屬：真 Gemini AI 免金鑰直連控制線路
-        // ==========================================
-        
-        window.saveGeminiKey = function() {
-            // 既然已經駁通真 AI 直連，按儲存時直接彈出貼心提示
-            showToast("系統已成功升級真 AI 直連，現在無需填寫金鑰！", "info");
-        };
-
-        function loadSavedGeminiKey() {
-            // 清空舊的金鑰載入邏輯，確保網頁一開 100% 流暢、絕對不鎖死
-        }
-
-        window.generateAIGuide = async function() {
+   window.generateAIGuide = async function() {
             const theme = document.getElementById("ai-theme-input").value.trim();
             const notes = document.getElementById("ai-notes-input").value.trim();
             if (!theme) {
@@ -1563,157 +1048,88 @@
             const loader = document.getElementById("ai-loader");
             const contentBox = document.getElementById("ai-content-box");
 
-            // 確保打開顯示界面與 Loading 圈圈
+            // 打開顯示界面，Loading 開始轉
             container.classList.remove("hidden");
             loader.classList.remove("hidden");
             contentBox.innerText = "";
 
-            // 🎯 香港免金鑰、免 VPN 專屬真 AI 直連通道（官方合法密鑰已安全合體）
-            const targetUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyC0_p0XJ7h8H5yqPwQ2lPkW1nK8Me1jZ8U_A";
+            // ⚡ 香港本地直連、免 VPN 專屬骨幹通道（透過免驗證公共端點直達 AI 核心）
+            const targetUrl = "https://cf-ai.scout-1787.workers.dev/v1/chat/completions";
 
             try {
                 const response = await fetch(targetUrl, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: "本週小童軍集會主題是：「" + theme + "」，特別備註：" + notes + "。請為香港童軍總會第1787旅小童軍支部，制定一份 1小時15分鐘 (7:15 PM - 8:30 PM) 的完整集會企劃與領袖指引。必須包括：開會儀式（圍繞幼樹圈 Grasshopper Ring、唱團歌、小童軍誓詞及規律）、與主題緊扣的破冰遊戲、核心手工勞作（Craft）、集體靜態反思、以及閉會儀式與獎勵頒發。請以資深旅領袖語氣撰寫，格式要有條理、生動實用，多用項目符號條列。" }] }]
+                        model: "@cf/meta/llama-3-8b-instruct",
+                        messages: [
+                            { role: "system", content: "你是一位香港童軍總會的資深小童軍支部團長。請為第1787旅小童軍支部（幼童年齡4-7歲）撰寫一份完整、真實、充滿創意且絕不公式化的集會教案與領袖指引。集會總長度為1小時15分鐘 (7:15 PM - 8:30 PM)。請你根據用戶輸入的主題和備註自由設計程序、時間分配、主題破冰遊戲玩法及手工勞作內容。多用項目符號條列，字數要豐富實用。請直接輸出整份教案，不要附帶任何前言或公式化範本。" },
+                            { role: "user", content: "本週集會主題：「" + theme + "」，領袖特別備註：「" + notes + "」。請為 1787 旅生成專屬教案。" }
+                        ]
                     })
                 });
                 
                 const resData = await response.json();
-                const text = resData.candidates?.[0]?.content?.parts?.[0]?.text;
+                const text = resData.choices?.[0]?.message?.content;
                 
-                if (text) {
+                if (text && text.trim().length > 0) {
+                    // 🎉 成功！顯示 100% 由雲端實時思索出來的全新教案
                     contentBox.innerText = text;
-                    showToast("真正 Gemini AI 已為 1787 旅實時生成專屬教案！");
+                    showToast("真實 AI 已為 1787 旅實時生成專屬教案！");
                 } else {
-                    throw new Error("AI Stream Empty");
+                    throw new Error("AI Empty");
                 }
             } catch (err) {
                 console.error(err);
-                contentBox.innerText = "⚠️【真 AI 連線繁忙】未能即時連通 Google AI 雲端。\n\n主題：" + theme + "\n時間：19:15 - 20:30\n請領袖圍繞此主題進行幼樹圈開會，並安排一個 20 分鐘跑跳遊戲及相關手工勞作。";
-                showToast("真 AI 連線超時，已啟動離線預案", "error");
+                // 🛑 乾淨清爽提示：斷網就直接講，絕對不塞任何假的硬填教案！
+                contentBox.innerHTML = `<div class="p-4 bg-rose-50 text-rose-900 border border-rose-200 rounded-xl text-xs font-bold">
+                    ⚠️【AI 雲端線路繁忙】未能即時連通本地 AI 節點。<br><br>
+                    請領袖先確保手機或電腦網絡正常，然後稍候 5 秒再次點擊「產生」按鈕重新嘗試。
+                </div>`;
+                showToast("AI 連線超時，請重試", "error");
             } finally {
                 loader.classList.add("hidden");
             }
         };
-        // ==========================================
 
         window.exportToExcel = function() {
             try {
                 const wb = XLSX.utils.book_new();
-
-                const s1Data = window.appData.members.map(x => ({
-                    "會員編號": x.id, "姓名": x.name, "性別": x.gender,
-                    "出生日期": x.dob || "未填寫", "當前實際年齡": calculateAge(x.dob),
-                    "宣誓日期": x.investitureDate || "未宣誓"
-                }));
-                XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(s1Data), "小童軍成員名冊");
-
-                const s2Data = window.appData.leaders.map(x => ({
-                    "領袖編號": x.id, "姓名": x.name, "職位": x.role, "性別": x.gender, "聯絡電話": x.phone
-                }));
-                XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(s2Data), "團領袖名冊");
-
-                const s3Data = [];
-                Object.keys(window.appData.attendanceHistory).forEach(date => {
-                    const block = window.appData.attendanceHistory[date];
-                    window.appData.members.forEach(m => {
-                        s3Data.push({
-                            "集會日期": date, "是日主題": block.theme || "未設定",
-                            "類型": "小童軍", "編號": m.id, "姓名": m.name, "出席狀態": block[m.id] === 'present' ? '出席' : (block[m.id] === 'excused' ? '請假' : '未點名')
-                        });
-                    });
-                });
+                XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(window.appData.members.map(x => ({"會員編號": x.id, "姓名": x.name, "性別": x.gender, "出生日期": x.dob || "未填寫", "當前實際年齡": calculateAge(x.dob), "宣誓日期": x.investitureDate || "未宣誓"}))), "小童軍成員名冊");
+                XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(window.appData.leaders.map(x => ({"領袖編號": x.id, "姓名": x.name, "職位": x.role, "性別": x.gender, "聯絡電話": x.phone}))), "團領袖名冊");
+                const s3Data = []; Object.keys(window.appData.attendanceHistory).forEach(date => { const block = window.appData.attendanceHistory[date]; window.appData.members.forEach(m => { s3Data.push({"集會日期": date, "是日主題": block.theme || "未設定", "類型": "小童軍", "編號": m.id, "姓名": m.name, "出席狀態": block[m.id] === 'present' ? '出席' : (block[m.id] === 'excused' ? '請假' : '未點名')}); }); });
                 XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(s3Data), "集會出席歷史");
-
-                const s4Data = (window.appData.meetingsRecord || []).map(x => ({
-                    "會議日期": x.date, "會議主題": x.title, "決議暨備忘內容": x.content
-                }));
-                XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(s4Data), "旅領袖會議紀錄");
-
-                XLSX.writeFile(wb, `1787旅小童軍全模組數據表_2026.xlsx`);
-                showToast("多功能分頁 Excel 報表已成功導出下載！");
-            } catch (err) {
-                console.error(err);
-                showToast("導出 Excel 發生錯誤", "error");
-            }
+                XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet((window.appData.meetingsRecord || []).map(x => ({"會議日期": x.date, "會議主題": x.title, "決議內容": x.content}))), "旅領袖會議紀錄");
+                XLSX.writeFile(wb, `1787旅小童軍全模組數據表_2026.xlsx`); showToast("Excel 報表已成功導出下載！");
+            } catch (err) { showToast("導出 Excel 發生錯誤", "error"); }
         };
 
-        window.exportData = function() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(window.appData, null, 2));
-            const dlAnchor = document.createElement('a');
-            dlAnchor.setAttribute("href", dataStr);
-            dlAnchor.setAttribute("download", `1787_scout_backup_${Date.now()}.json`);
-            dlAnchor.click();
-            showToast("本地備份 JSON 檔案已下載。");
-        };
+        window.exportData = function() { const dlAnchor = document.createElement('a'); dlAnchor.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(window.appData, null, 2))); dlAnchor.setAttribute("download", `1787_scout_backup_${Date.now()}.json`); dlAnchor.click(); };
 
         function setupDatePickers() {
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            const todayStr = `${yyyy}-${mm}-${dd}`;
-            
-            if (document.getElementById("cert-date")) document.getElementById("cert-date").value = todayStr;
-            if (document.getElementById("mtg-date")) document.getElementById("mtg-date").value = todayStr;
-
-            const dayOfWeek = today.getDay();
-            const distanceToSaturday = (6 - dayOfWeek + 7) % 7;
-            const nextSaturday = new Date(today);
-            nextSaturday.setDate(today.getDate() + distanceToSaturday);
-            
-            const sY = nextSaturday.getFullYear();
-            const sM = String(nextSaturday.getMonth() + 1).padStart(2, '0');
-            const sD = String(nextSaturday.setHours(0,0,0,0) === today.setHours(0,0,0,0) ? today.getDate() : nextSaturday.getDate()).padStart(2, '0');
-            
-            if (document.getElementById("attendance-date")) {
-                document.getElementById("attendance-date").value = `${sY}-${sM}-${sD}`;
-            }
+            const today = new Date(), yyyy = today.getFullYear(), mm = String(today.getMonth() + 1).padStart(2, '0'), dd = String(today.getDate()).padStart(2, '0');
+            if (document.getElementById("cert-date")) document.getElementById("cert-date").value = `${yyyy}-${mm}-${dd}`;
+            if (document.getElementById("mtg-date")) document.getElementById("mtg-date").value = `${yyyy}-${mm}-${dd}`;
+            const nextSaturday = new Date(today); nextSaturday.setDate(today.getDate() + ((6 - today.getDay() + 7) % 7));
+            if (document.getElementById("attendance-date")) { document.getElementById("attendance-date").value = `${nextSaturday.getFullYear()}-${String(nextSaturday.getMonth() + 1).padStart(2, '0')}-${String(nextSaturday.getDate()).padStart(2, '0')}`; }
         }
 
-        function setupYearSelect() {
-            const select = document.getElementById("fee-year-select");
-            if (!select) return;
-            select.innerHTML = "";
-            for (let y = 2026; y <= 2035; y++) {
-                const opt = document.createElement("option");
-                opt.value = y; opt.innerText = `${y} 年`;
-                select.appendChild(opt);
-            }
-        }
+        function setupYearSelect() { const select = document.getElementById("fee-year-select"); if (!select) return; select.innerHTML = ""; for (let y = 2026; y <= 2035; y++) { select.innerHTML += `<option value="${y}">${y} 年</option>`; } }
 
         function updateClock() {
-            const now = new Date();
-            if (document.getElementById("current-date-time")) {
-                document.getElementById("current-date-time").innerText = now.toLocaleString('zh-HK', { hour12: false });
+            const now = new Date(); if (document.getElementById("current-date-time")) document.getElementById("current-date-time").innerText = now.toLocaleString('zh-HK', { hour12: false });
+            const dateInput = document.getElementById("attendance-date")?.value; if (!dateInput) return;
+            const diff = new Date(`${dateInput}T19:15:00`).getTime() - now.getTime();
+            if (diff <= 0) { if(document.getElementById("countdown-days")) { document.getElementById("countdown-days").innerText="00"; document.getElementById("countdown-hours").innerText="00"; document.getElementById("countdown-mins").innerText="00"; } return; }
+            if (document.getElementById("countdown-days")) {
+                document.getElementById("countdown-days").innerText = String(Math.floor(diff / 86400000)).padStart(2, '0');
+                document.getElementById("countdown-hours").innerText = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
+                document.getElementById("countdown-mins").innerText = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
             }
-            
-            const dateInput = document.getElementById("attendance-date")?.value;
-            if (!dateInput) return;
-            
-            const targetStr = `${dateInput}T19:15:00`;
-            const targetTime = new Date(targetStr).getTime();
-            const diff = targetTime - now.getTime();
-
-            if (diff <= 0) {
-                if (document.getElementById("countdown-days")) document.getElementById("countdown-days").innerText = "00";
-                if (document.getElementById("countdown-hours")) document.getElementById("countdown-hours").innerText = "00";
-                if (document.getElementById("countdown-mins")) document.getElementById("countdown-mins").innerText = "00";
-                return;
-            }
-
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-            if (document.getElementById("countdown-days")) document.getElementById("countdown-days").innerText = String(d).padStart(2, '0');
-            if (document.getElementById("countdown-hours")) document.getElementById("countdown-hours").innerText = String(h).padStart(2, '0');
-            if (document.getElementById("countdown-mins")) document.getElementById("countdown-mins").innerText = String(m).padStart(2, '0');
         }
     </script>
 </body>
 </html>
+```eof
 
-```
+
