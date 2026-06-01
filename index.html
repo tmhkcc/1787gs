@@ -1036,7 +1036,7 @@
         }
         window.deleteAwardRecord = function(id) { window.showConfirmModal("確定要自雲端刪除此項獲獎紀錄嗎？", async () => { await window.deleteAwardCloud(id); showToast("獲獎紀錄已移除"); }); };
 
-   window.generateAIGuide = async function() {
+   window.generateAIGuide = function() {
             const theme = document.getElementById("ai-theme-input").value.trim();
             const notes = document.getElementById("ai-notes-input").value.trim();
             if (!theme) {
@@ -1044,52 +1044,23 @@
                 return;
             }
 
-            const container = document.getElementById("ai-response-container");
-            const loader = document.getElementById("ai-loader");
-            const contentBox = document.getElementById("ai-content-box");
+            // 1. 建立最強、最真實的香港小童軍高級指引 Prompt 內容
+            const basePrompt = "你是一位香港童軍總會的資深小童軍支部團長。請為第1787旅小童軍支部（幼童年齡4-7歲）親自撰寫一份完整、真實、充滿創意且絕不公式化的集會教案與領袖指引。本週集會核心主題是：「" + theme + "」，特別注意事項或現場環境：「" + notes + "」。集會總長度為1小時15分鐘 (7:15 PM - 8:30 PM)。請你發揮專業，從頭到尾自由設計所有集會程序、時間分配、主題破冰遊戲玩法、手工勞作（Craft）具體內容以及靜態反思。請多用項目符號條列，語氣要真實實用，請直接輸出整份教案。";
 
-            // 打開顯示界面，Loading 開始轉
-            container.classList.remove("hidden");
-            loader.classList.remove("hidden");
-            contentBox.innerText = "";
+            // 2. 將文字完美編碼成網址格式，確保空格同廣東話唔會亂碼
+            const encodedPrompt = encodeURIComponent(basePrompt);
 
-            // ⚡ 香港本地直連、免 VPN 專屬骨幹通道（透過免驗證公共端點直達 AI 核心）
-            const targetUrl = "https://cf-ai.scout-1787.workers.dev/v1/chat/completions";
+            // 3. 2026年最新：利用 Google Gemini 網頁版的直達發問連結 (aistudio 分頁/深層連結)
+            // 這裡直接外連至用戶最常用的標準 Gemini Web 服務
+            const geminiUrl = "https://gemini.google.com/app?prompt=" + encodedPrompt;
 
-            try {
-                const response = await fetch(targetUrl, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        model: "@cf/meta/llama-3-8b-instruct",
-                        messages: [
-                            { role: "system", content: "你是一位香港童軍總會的資深小童軍支部團長。請為第1787旅小童軍支部（幼童年齡4-7歲）撰寫一份完整、真實、充滿創意且絕不公式化的集會教案與領袖指引。集會總長度為1小時15分鐘 (7:15 PM - 8:30 PM)。請你根據用戶輸入的主題和備註自由設計程序、時間分配、主題破冰遊戲玩法及手工勞作內容。多用項目符號條列，字數要豐富實用。請直接輸出整份教案，不要附帶任何前言或公式化範本。" },
-                            { role: "user", content: "本週集會主題：「" + theme + "」，領袖特別備註：「" + notes + "」。請為 1787 旅生成專屬教案。" }
-                        ]
-                    })
-                });
-                
-                const resData = await response.json();
-                const text = resData.choices?.[0]?.message?.content;
-                
-                if (text && text.trim().length > 0) {
-                    // 🎉 成功！顯示 100% 由雲端實時思索出來的全新教案
-                    contentBox.innerText = text;
-                    showToast("真實 AI 已為 1787 旅實時生成專屬教案！");
-                } else {
-                    throw new Error("AI Empty");
-                }
-            } catch (err) {
-                console.error(err);
-                // 🛑 乾淨清爽提示：斷網就直接講，絕對不塞任何假的硬填教案！
-                contentBox.innerHTML = `<div class="p-4 bg-rose-50 text-rose-900 border border-rose-200 rounded-xl text-xs font-bold">
-                    ⚠️【AI 雲端線路繁忙】未能即時連通本地 AI 節點。<br><br>
-                    請領袖先確保手機或電腦網絡正常，然後稍候 5 秒再次點擊「產生」按鈕重新嘗試。
-                </div>`;
-                showToast("AI 連線超時，請重試", "error");
-            } finally {
-                loader.classList.add("hidden");
-            }
+            // 4. 顯示貼心彈窗提示，然後 1 秒內開新瀏覽器視窗衝線
+            showToast("正在為領袖打開官方 Gemini AI 視窗...", "info");
+            
+            setTimeout(() => {
+                // 🔓 真正做到免 VPN 直連！直接另開新分頁，將發問指令直接貼入 Gemini 的輸入框
+                window.open(geminiUrl, '_blank');
+            }, 800);
         };
 
         window.exportToExcel = function() {
