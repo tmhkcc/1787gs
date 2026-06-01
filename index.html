@@ -78,10 +78,6 @@
                     <i data-lucide="briefcase" class="w-5 h-5"></i>
                     <span>旅領袖會議紀錄</span>
                 </button>
-                <button onclick="switchTab('ai-guide')" id="btn-ai-guide" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-scout-light opacity-85 hover:bg-scout-green hover:opacity-100 transition">
-                    <i data-lucide="sparkles" class="w-5 h-5"></i>
-                    <span>AI 指引助手</span>
-                </button>
                 <button onclick="switchTab('settings')" id="btn-settings" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-scout-light opacity-85 hover:bg-scout-green hover:opacity-100 transition">
                     <i data-lucide="settings" class="w-5 h-5"></i>
                     <span>數據管理與 Excel</span>
@@ -188,30 +184,22 @@
 
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
                         <h4 class="text-lg font-bold text-slate-800 mb-2">領袖快捷通道</h4>
-                        <div class="grid grid-cols-3 gap-2">
-                            <button onclick="switchTab('attendance')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-scout-light/50 border border-scout-green/10 text-scout-dark hover:bg-scout-green hover:text-white transition group">
+                        <div class="grid grid-cols-2 gap-2 flex-1">
+                            <button onclick="switchTab('attendance')" class="flex flex-col items-center justify-center p-2 rounded-xl bg-scout-light/50 border border-scout-green/10 text-scout-dark hover:bg-scout-green hover:text-white transition group">
                                 <i data-lucide="check-square" class="w-5 h-5 mb-1 text-scout-green group-hover:text-white"></i>
-                                <span class="text-[10px] font-bold">今日點名</span>
+                                <span class="text-xs font-bold">今日點名</span>
                             </button>
-                            <button onclick="switchTab('fees')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-scout-light/50 border border-scout-green/10 text-scout-dark hover:bg-scout-green hover:text-white transition group">
+                            <button onclick="switchTab('fees')" class="flex flex-col items-center justify-center p-2 rounded-xl bg-scout-light/50 border border-scout-green/10 text-scout-dark hover:bg-scout-green hover:text-white transition group">
                                 <i data-lucide="dollar-sign" class="w-5 h-5 mb-1 text-scout-green group-hover:text-white"></i>
-                                <span class="text-[10px] font-bold">收取季費</span>
+                                <span class="text-xs font-bold">收取季費</span>
                             </button>
-                            <button onclick="switchTab('progress')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-scout-light/50 border border-scout-green/10 text-scout-dark hover:bg-scout-green hover:text-white transition group">
+                            <button onclick="switchTab('progress')" class="flex flex-col items-center justify-center p-2 rounded-xl bg-scout-light/50 border border-scout-green/10 text-scout-dark hover:bg-scout-green hover:text-white transition group">
                                 <i data-lucide="star" class="w-5 h-5 mb-1 text-scout-green group-hover:text-white"></i>
-                                <span class="text-[10px] font-bold">進度登錄</span>
+                                <span class="text-xs font-bold">進度登錄</span>
                             </button>
-                            <button onclick="switchTab('certificate')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-scout-light/50 border border-scout-green/10 text-scout-dark hover:bg-scout-green hover:text-white transition group">
-                                <i data-lucide="book-open" class="w-5 h-5 mb-1 text-scout-green group-hover:text-white"></i>
-                                <span class="text-[10px] font-bold">獎勵紀錄</span>
-                            </button>
-                            <button onclick="switchTab('ai-guide')" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-scout-light/50 border border-scout-green/10 text-scout-dark hover:bg-scout-green hover:text-white transition group">
-                                <i data-lucide="sparkles" class="w-5 h-5 mb-1 text-scout-green group-hover:text-white"></i>
-                                <span class="text-[10px] font-bold">AI指引</span>
-                            </button>
-                            <button onclick="exportToExcel()" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 transition group col-span-1">
+                            <button onclick="exportToExcel()" class="flex flex-col items-center justify-center p-2 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 transition group">
                                 <i data-lucide="file-spreadsheet" class="w-5 h-5 mb-1 text-white"></i>
-                                <span class="text-[10px] font-black">匯出Excel</span>
+                                <span class="text-xs font-black">匯出Excel</span>
                             </button>
                         </div>
                     </div>
@@ -233,10 +221,10 @@
                                 </div>
                             </li>
                             <li class="flex gap-3 items-start border-b border-slate-50 pb-3">
-                                <span class="p-2 rounded-lg bg-blue-100 text-blue-700 mt-0.5"><i data-lucide="sparkles" class="w-4 h-4"></i></span>
+                                <span class="p-2 rounded-lg bg-blue-100 text-blue-700 mt-0.5"><i data-lucide="star" class="w-4 h-4"></i></span>
                                 <div>
-                                    <p class="text-sm font-semibold text-slate-700">旅費季度提醒</p>
-                                    <p class="text-xs text-slate-400 mt-0.5">預載 2026 年至 2035 年的所有季度，1、4、7、10月固定提示收取。</p>
+                                    <p class="text-sm font-semibold text-slate-700">獎勵紀錄模組優化</p>
+                                    <p class="text-xs text-slate-400 mt-0.5">已完美修復人名下拉選單顯示問題，隊員獲獎紀錄登錄更順暢。</p>
                                 </div>
                             </li>
                         </ul>
@@ -523,47 +511,7 @@
                 </div>
             </section>
 
-            <!-- 8. AI 指引助手 (免VPN、免Key、永久免封鎖直連黃金版) -->
-            <section id="tab-ai-guide" class="tab-content hidden space-y-6">
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
-                    <div>
-                        <h3 class="text-lg font-bold text-slate-800">AI 領袖集會指引助手 (Gemini 驅動)</h3>
-                        <p class="text-xs text-slate-400 mt-0.5">輸入集會的主題，AI 將結合香港小童軍 4-7 歲幼童生理特徵，精心制定 1小時15分鐘 (7:15 PM - 8:30 PM) 的優質集會企劃案。</p>
-                    </div>
-
-                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-xs font-bold text-emerald-950 flex items-center gap-2">
-                        <i data-lucide="sparkles" class="w-5 h-5 text-emerald-700 animate-bounce"></i>
-                        <span>1787 Grasshopper Ring 指引助手</span>
-                    </div>
-
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">本週集會主題 (Meeting Theme)</label>
-                            <input type="text" id="ai-theme-input" placeholder="例如：基礎繩結認識、社區探索、大自然尋寶、急救小常識..." class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-scout-green bg-white text-slate-800">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">特別備註或指定環境 (選填)</label>
-                            <textarea id="ai-notes-input" placeholder="例如：今天下雨改為全室內遊戲、隊員包含多位剛加入的4歲新人、需要包含一個動態跑跳破冰遊戲..." class="w-full border border-slate-200 rounded-lg px-4 py-2 text-sm h-20 focus:outline-none focus:ring-1 focus:ring-scout-green bg-white text-slate-800"></textarea>
-                        </div>
-                        <div class="flex justify-end">
-                            <button onclick="generateAIGuide()" id="btn-generate-ai" class="bg-scout-green hover:bg-scout-dark text-white text-sm px-6 py-2.5 rounded-lg font-bold transition flex items-center gap-2 shadow-sm">
-                                <i data-lucide="sparkles" class="w-4 h-4"></i> 產生高階集會指引
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- AI Response Container Wrapper -->
-                    <div id="ai-response-container" class="hidden border border-slate-200 rounded-xl p-6 bg-slate-50 relative min-h-[150px]">
-                        <div id="ai-loader" class="hidden flex flex-col items-center justify-center py-8">
-                            <div class="w-8 h-8 border-4 border-scout-green border-t-transparent rounded-full animate-spin mb-2"></div>
-                            <p class="text-xs text-slate-400 font-semibold tracking-wide">AI 領袖正在規劃 1787 旅專屬進度教案中...</p>
-                        </div>
-                        <div id="ai-content-box" class="prose max-w-none text-sm text-slate-700 leading-relaxed whitespace-pre-wrap font-medium text-left"></div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 9. SETTINGS TAB -->
+            <!-- 8. SETTINGS TAB -->
             <section id="tab-settings" class="tab-content hidden space-y-6">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -696,37 +644,19 @@
         };
 
         const defaultMembers = [
-            { id: "GS-2026-01", name: "陳小明", gender: "男", dob: "2021-03-15", investitureDate: "2026-01-10", progress: {} },
-            { id: "GS-2026-02", name: "李心怡", gender: "女", dob: "2020-07-22", investitureDate: "2026-01-10", progress: {} },
-            { id: "GS-2026-03", name: "張家樂", gender: "男", dob: "2022-01-05", investitureDate: "2026-02-14", progress: {} },
-            { id: "GS-2026-04", name: "黃曉彤", gender: "女", dob: "2021-11-18", investitureDate: "2026-02-14", progress: {} },
-            { id: "GS-2026-05", name: "何梓軒", gender: "男", dob: "2020-04-12", investitureDate: "2025-10-18", progress: {} },
-            { id: "GS-2026-06", name: "林芷晴", gender: "女", dob: "2021-08-29", investitureDate: "2025-10-18", progress: {} },
-            { id: "GS-2026-07", name: "梁宇軒", gender: "男", dob: "2021-02-03", investitureDate: "2026-03-07", progress: {} },
-            { id: "GS-2026-08", name: "吳雨霏", gender: "女", dob: "2022-05-14", investitureDate: "2026-03-07", progress: {} },
-            { id: "GS-2026-09", name: "郭子豪", gender: "男", dob: "2020-09-21", investitureDate: "2025-11-22", progress: {} },
-            { id: "GS-2026-10", name: "曾美琪", gender: "女", dob: "2019-12-15", investitureDate: "2025-05-15", progress: {} },
-            { id: "GS-2026-11", name: "蔡睿謙", gender: "男", dob: "2021-06-11", investitureDate: "2026-04-04", progress: {} },
-            { id: "GS-2026-12", name: "許思敏", gender: "女", dob: "2022-03-02", investitureDate: "2026-04-04", progress: {} },
-            { id: "GS-2026-13", name: "鄭傲天", gender: "男", dob: "2020-11-05", investitureDate: "2025-12-05", progress: {} },
-            { id: "GS-2026-14", name: "謝梓瀅", gender: "女", dob: "2021-01-25", investitureDate: "2025-12-05", progress: {} },
-            { id: "GS-2026-15", name: "鄧卓然", gender: "男", dob: "2019-08-09", investitureDate: "2025-08-09", progress: {} },
-            { id: "GS-2026-16", name: "馮雅婷", gender: "女", dob: "2020-02-27", investitureDate: "2025-08-09", progress: {} },
-            { id: "GS-2026-17", name: "曾浩然", gender: "男", dob: "2021-04-19", investitureDate: "2026-05-10", progress: {} },
-            { id: "GS-2026-18", name: "盧可晴", gender: "女", dob: "2021-09-02", investitureDate: "2026-05-10", progress: {} },
-            { id: "GS-2026-19", name: "鍾嘉熙", gender: "男", dob: "2020-06-30", investitureDate: "2025-09-13", progress: {} },
-            { id: "GS-2026-20", name: "羅曦媛", gender: "女", dob: "2019-10-11", investitureDate: "2025-09-13", progress: {} },
-            { id: "GS-2026-21", name: "胡梓謙", gender: "男", dob: "2022-02-14", investitureDate: "2026-05-23", progress: {} },
-            { id: "GS-2026-22", name: "潘諾依", gender: "女", dob: "2021-07-08", investitureDate: "2026-05-23", progress: {} },
-            { id: "GS-2026-23", name: "袁俊生", gender: "男", dob: "2020-01-19", investitureDate: "2025-07-11", progress: {} },
-            { id: "GS-2026-24", name: "姚巧瑩", gender: "女", dob: "2021-05-04", investitureDate: "2025-07-11", progress: {} }
+            { id: "GS-2026-01", name: "陳曉汶", gender: "女", dob: "2020-10-27", investitureDate: "2025-09-20", progress: {} },
+            { id: "GS-2026-02", name: "梁博文", gender: "男", dob: "2020-10-11", investitureDate: "2025-09-13", progress: {} },
+            { id: "GS-2026-03", name: "楊欣睿", gender: "女", dob: "2021-05-03", investitureDate: "2025-09-13", progress: {} },
+            { id: "GS-2026-04", name: "周俊禮", gender: "男", dob: "2020-12-09", investitureDate: "2025-09-13", progress: {} },
+            { id: "GS-2026-05", name: "曾保燊", gender: "男", dob: "2020-03-20", investitureDate: "2026-03-21", progress: {} },
+            { id: "GS-2026-06", name: "鄭朗謙", gender: "男", dob: "2021-06-27", investitureDate: "2026-03-21", progress: {} }
+           
         ];
 
         const defaultLeaders = [
-            { id: "L-01", name: "盧小草", role: "小童軍團領袖 (GSL)", gender: "女", phone: "9123-4567" },
-            { id: "L-02", name: "葉翠林", role: "副小童軍團領袖 (AGSL)", gender: "男", phone: "9876-5432" },
-            { id: "L-03", name: "陳大木", role: "副小童軍團領袖 (AGSL)", gender: "男", phone: "9234-5678" },
-            { id: "L-04", name: "林水滴", role: "教練領袖 (Instructor)", gender: "女", phone: "9345-6789" }
+            { id: "L-01", name: "Tony Lui", role: "小童軍團團長 (GhSL)", gender: "男", phone: "92725114" },
+            { id: "L-02", name: "Mabel Lai", role: "小童軍團副團長 (AGhSL)", gender: "女", phone: "92720685" },
+            { id: "L-03", name: "Stella", role: "小童軍團副團長 (AGhSL)", gender: "女", phone: " " }
         ];
 
         window.showConfirmModal = function(message, action) {
@@ -741,7 +671,7 @@
             setupYearSelect();
             setInterval(updateClock, 1000);
             setupCloudListeners();
-            try { await signInAnonymously(auth); } catch (e) { console.warn("Firestore ready."); }
+            try { await signInAnonymously(auth); } catch (e) { console.warn("Firestore synced."); }
         }
 
         function setupCloudListeners() {
@@ -789,7 +719,7 @@
                     badge.innerHTML = `<span class="inline-block w-2 h-2 bg-emerald-500 rounded-full animate-pulse mr-1.5"></span> 雲端已安全連線`;
                 } else {
                     badge.className = "px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold flex items-center";
-                    badge.innerHTML = `<span class="inline-block w-2 h-2 bg-amber-500 rounded-full animate-pulse mr-1.5"></span> 離線/快照模式運作中`;
+                    badge.innerHTML = `<span class="inline-block w-2 h-2 bg-amber-500 rounded-full animate-pulse mr-1.5"></span> 離線快照運行`;
                 }
             }
         }
@@ -1036,33 +966,6 @@
         }
         window.deleteAwardRecord = function(id) { window.showConfirmModal("確定要自雲端刪除此項獲獎紀錄嗎？", async () => { await window.deleteAwardCloud(id); showToast("獲獎紀錄已移除"); }); };
 
-   window.generateAIGuide = function() {
-            const theme = document.getElementById("ai-theme-input").value.trim();
-            const notes = document.getElementById("ai-notes-input").value.trim();
-            if (!theme) {
-                showToast("請先輸入本週集會的主題", "error");
-                return;
-            }
-
-            // 1. 建立最強、最真實的香港小童軍高級指引 Prompt 內容
-            const basePrompt = "你是一位香港童軍總會的資深小童軍支部團長。請為第1787旅小童軍支部（幼童年齡4-7歲）親自撰寫一份完整、真實、充滿創意且絕不公式化的集會教案與領袖指引。本週集會核心主題是：「" + theme + "」，特別注意事項或現場環境：「" + notes + "」。集會總長度為1小時15分鐘 (7:15 PM - 8:30 PM)。請你發揮專業，從頭到尾自由設計所有集會程序、時間分配、主題破冰遊戲玩法、手工勞作（Craft）具體內容以及靜態反思。請多用項目符號條列，語氣要真實實用，請直接輸出整份教案。";
-
-            // 2. 將文字完美編碼成網址格式，確保空格同廣東話唔會亂碼
-            const encodedPrompt = encodeURIComponent(basePrompt);
-
-            // 3. 2026年最新：利用 Google Gemini 網頁版的直達發問連結 (aistudio 分頁/深層連結)
-            // 這裡直接外連至用戶最常用的標準 Gemini Web 服務
-            const geminiUrl = "https://gemini.google.com/app?prompt=" + encodedPrompt;
-
-            // 4. 顯示貼心彈窗提示，然後 1 秒內開新瀏覽器視窗衝線
-            showToast("正在為領袖打開官方 Gemini AI 視窗...", "info");
-            
-            setTimeout(() => {
-                // 🔓 真正做到免 VPN 直連！直接另開新分頁，將發問指令直接貼入 Gemini 的輸入框
-                window.open(geminiUrl, '_blank');
-            }, 800);
-        };
-
         window.exportToExcel = function() {
             try {
                 const wb = XLSX.utils.book_new();
@@ -1101,6 +1004,3 @@
     </script>
 </body>
 </html>
-```eof
-
-
