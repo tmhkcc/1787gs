@@ -125,7 +125,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
                         <div>
-                            <p class="text-sm text-slate-500 font-medium">小童軍成員 (雲端)</p>
+                            <p class="text-sm text-slate-500 font-medium">小童軍成員</p>
                             <h3 id="dash-scout-count" class="text-3xl font-bold text-slate-800 mt-1">-- / 24 <span class="text-sm font-normal text-slate-400">名</span></h3>
                         </div>
                         <div class="bg-emerald-100 p-3 rounded-xl text-emerald-700">
@@ -134,7 +134,7 @@
                     </div>
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
                         <div>
-                            <p class="text-sm text-slate-500 font-medium">團領袖 (Leaders)</p>
+                            <p class="text-sm text-slate-500 font-medium">團領袖</p>
                             <h3 id="dash-leader-count" class="text-3xl font-bold text-slate-800 mt-1">-- <span class="text-sm font-normal text-slate-400">員</span></h3>
                         </div>
                         <div class="bg-amber-100 p-3 rounded-xl text-amber-700">
@@ -152,7 +152,7 @@
                     </div>
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
                         <div class="flex-1 pr-2">
-                            <p class="text-sm text-slate-500 font-medium">本日集會出席率</p>
+                            <p class="text-sm text-slate-500 font-medium">本週集會出席率</p>
                             <h3 id="dash-attendance-rate" class="text-3xl font-bold text-slate-800 mt-1">--%</h3>
                             <p id="dash-meeting-theme" class="text-xs text-scout-green font-semibold mt-1.5 truncate max-w-[150px]" title="主題">主題: 未設定</p>
                         </div>
@@ -252,8 +252,8 @@
                             </p>
                         </div>
                         <div class="mt-4 pt-4 border-t border-slate-100 flex gap-4 text-xs text-slate-500">
-                            <div><strong class="text-scout-green">小童軍誓詞：</strong>「我願愛神、愛家、愛國家。」</div>
-                            <div><strong class="text-scout-green">小童軍規律：</strong>「小童軍，愛快樂，又聰明，又溫良。」</div>
+                            <div><strong class="text-scout-green">小童軍誓詞：</strong><br>「我願參加小童軍，愛神愛人愛國家。」</div>
+                            <div><strong class="text-scout-green">小童軍規律：</strong><br>「小童軍日行一善。」</div>
                         </div>
                     </div>
                 </div>
@@ -974,16 +974,17 @@
             }, 4000);
         }
 
-        function refreshCurrentTab() {
-            updateDashboardStats();
-            renderRosters();
-            renderAttendanceList();
-            renderFeeTracker();
-            populateProgressSelectors();
-            renderAwardsRecords();
-            renderMeetingsRecords(); 
-            lucide.createIcons();
-        }
+     function refreshCurrentTab() {
+    updateDashboardStats();
+    renderRosters();
+    renderAttendanceList();
+    renderFeeTracker();
+    populateProgressSelectors();
+    populateCertSelector(); 
+    renderAwardsRecords();
+    renderMeetingsRecords(); 
+    lucide.createIcons();
+}
 
         function updateDashboardStats() {
             if (!document.getElementById("dash-scout-count")) return;
